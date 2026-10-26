@@ -1,4 +1,4 @@
-/* Moore v1.0.0 — Moore Walcourt — aiguillage du favori « Moore », chargé à chaque clic.
+/* Moore - Outils v1.0.0 — Moore Walcourt — aiguillage du favori « Moore - Outils », chargé à chaque clic.
    Dans MyMinfin (…minfin.fgov.be) : charge moore-myminfin.js ; partout ailleurs (bases Odoo, odoo.com) : charge moore-odoo.js.
    Les deux fichiers sont publiés à côté de celui-ci ; chacun se met à jour séparément. */
 (async () => {
@@ -13,4 +13,4 @@
     if (!(e instanceof EvalError)) throw e;
     const s = document.createElement('script'); s.textContent = t; document.head.append(s); s.remove();
   }
-})().catch(e => alert('Moore : ' + ((e && e.message) || e)));
+})().catch(e => alert('Moore - Outils : ' + ((e && e.message) || e)));
