@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Installer le favori Moore - Odoo</title>
+<title>Installer le favori Moore</title>
 <style>
   :root {
     --navy: #1B2A4A;
@@ -126,17 +126,16 @@
   .etat-code.ko { color: var(--accent); }
   .bookmarklet[aria-disabled="true"] { background: #9AA3B5; border-color: #C9CFD6; cursor: not-allowed; }
   pre.json { white-space: pre-wrap; word-break: break-all; margin: 10px 0 0; font: 12px/1.45 Consolas, monospace; background: #F7F9FC; border: 1px solid var(--line); border-radius: 6px; padding: 10px; max-height: 260px; overflow: auto; }
-  header p.autre { margin-top: 8px; font-size: 13px; }
-  header p.autre a { color: #fff; font-weight: 600; }
+  body[data-outil="odoo"] [data-o]:not([data-o~="odoo"]),
+  body[data-outil="mmf"] [data-o]:not([data-o~="mmf"]) { display: none; }
 </style>
 </head>
-<body data-nav="chrome">
+<body data-nav="chrome" data-outil="odoo">
 <header>
   <div class="wrap">
     <div class="firm">Moore Walcourt - outils internes</div>
-    <h1>Favori Moore - Odoo <span class="ver">version 3.6.0</span></h1>
-    <p>Un seul favori, à installer une seule fois : il se met ensuite à jour tout seul, chaque clic charge la dernière version publiée. Ensuite, depuis la base Odoo du client : un clic sur « Moore - Odoo », puis le choix de l’outil : concordances TVA / chiffre d’affaires et rémunérations, grands livres clients et fournisseurs, tableau d’amortissements, grand livre des comptes ou documents clients et fournisseurs (factures PDF). Sur la page Mes bases Odoo (odoo.com), le même favori télécharge la liste de vos bases. Les fichiers sont repris par Excel.</p>
-    <p class="autre">Autre favori du cabinet : <a href="myminfin.html">Moore - MyMinfin</a> (compte-provisions TVA et documents MyMinfin).</p>
+    <h1>Favori Moore <span class="ver">Odoo et MyMinfin</span></h1>
+    <p>Un seul favori pour Odoo et MyMinfin, à installer une seule fois : il se met ensuite à jour tout seul, chaque clic charge la dernière version publiée. Il reconnaît le site ouvert. Depuis la base Odoo du client : concordances TVA / chiffre d’affaires et rémunérations, grands livres clients et fournisseurs, tableau d’amortissements, grand livre des comptes ou documents clients et fournisseurs (factures PDF) ; sur la page Mes bases Odoo (odoo.com), la liste de vos bases. Dans MyMinfin (connecté en tant que mandataire, client sélectionné) : compte-provisions, dettes et remboursements TVA vers Excel, ou téléchargement des documents du client en une fois.</p>
   </div>
 </header>
 
@@ -172,42 +171,51 @@
       </h2>
       <a class="bookmarklet" id="bm" href="#" aria-disabled="true" title="Glissez-moi dans la barre de favoris">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        Moore - Odoo
+        Moore
       </a>
       <p class="hint">Maintenez le clic sur le bouton, déplacez-le jusqu'à la barre, puis relâchez. <span id="clickmsg" class="msg warn" hidden>Il faut le glisser, pas cliquer dessus.</span></p>
       <p class="hint" id="bminfo">Préparation du favori…</p>
       <p><span id="etat" class="etat-code">Vérification du code en ligne…</span></p>
-      <p class="hint"><strong>Déjà un favori « Moore - Odoo » dans la barre (version 3.5 ou plus ancienne) ?</strong> Supprimez-le d'abord (clic droit &gt; Supprimer), ainsi que « Moore - Grand livre » et « Moore - Documents » sous Firefox, puis glissez celui-ci. C'est la dernière fois : les versions suivantes arrivent toutes seules.</p>
+      <p class="hint"><strong>Déjà des favoris Moore dans la barre ?</strong> Supprimez d'abord (clic droit &gt; Supprimer) « Moore - Odoo » et « Moore - MyMinfin », ainsi que « Moore - Grand livre » et « Moore - Documents » sous Firefox, puis glissez celui-ci. C'est la dernière fois : les versions suivantes arrivent toutes seules.</p>
 
       <div class="alt">
         <h3>Si le glisser-déposer ne fonctionne pas</h3>
         <button class="copy" id="copy" type="button">Copier le code du favori</button><span id="copymsg" class="msg" aria-live="polite"></span>
         <ol class="small" data-b="chrome">
           <li>Clic droit sur la barre de favoris &gt; <em>Ajouter une page…</em></li>
-          <li>Nom : <strong>Moore - Odoo</strong></li>
+          <li>Nom : <strong>Moore</strong></li>
           <li>URL : effacer le contenu puis coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>) &gt; <em>Enregistrer</em></li>
         </ol>
         <ol class="small" data-b="edge">
           <li>Sur cette page, appuyez sur <kbd>Ctrl</kbd> + <kbd>D</kbd>, choisissez le dossier <em>Barre des favoris</em> &gt; <em>Terminé</em>.</li>
           <li>Clic droit sur le favori qui vient d'apparaître dans la barre &gt; <em>Modifier</em>.</li>
-          <li>Nom : <strong>Moore - Odoo</strong> - URL : effacer le contenu puis coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>) &gt; <em>Enregistrer</em></li>
+          <li>Nom : <strong>Moore</strong> - URL : effacer le contenu puis coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>) &gt; <em>Enregistrer</em></li>
         </ol>
         <ol class="small" data-b="firefox">
           <li>Clic droit sur la barre personnelle &gt; <em>Ajouter un marque-page…</em></li>
-          <li>Nom : <strong>Moore - Odoo</strong></li>
+          <li>Nom : <strong>Moore</strong></li>
           <li>URL : coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>) &gt; <em>Enregistrer</em></li>
         </ol>
       </div>
     </div>
   </section>
 
-  <section class="card step">
+  <section class="card nav-choice" aria-label="Mode d'emploi">
+    <span class="label">Mode d'emploi :</span>
+    <div class="seg" role="tablist">
+      <button type="button" role="tab" data-outil="odoo" aria-selected="true">Outils Odoo</button>
+      <button type="button" role="tab" data-outil="mmf" aria-selected="false">Outils MyMinfin</button>
+    </div>
+    <span class="reco">Le favori reconnaît le site ouvert : dans MyMinfin, il ouvre les outils « Moore - MyMinfin » ; dans une base Odoo (ou sur la page Mes bases Odoo d'odoo.com), les outils « Moore - Odoo ».</span>
+  </section>
+
+  <section data-o="odoo" class="card step">
     <div class="num">3</div>
     <div>
       <h2>Utilisation</h2>
       <ol class="small">
         <li>Ouvrir la base Odoo du client et vérifier la <strong>société active</strong> en haut à droite.</li>
-        <li>Cliquer sur <span data-b="chrome edge">le favori</span><span data-b="firefox">le marque-page</span> <strong>Moore - Odoo</strong>, puis choisir l'outil dans la fenêtre qui s'ouvre par-dessus Odoo.</li>
+        <li>Cliquer sur <span data-b="chrome edge">le favori</span><span data-b="firefox">le marque-page</span> <strong>Moore</strong>, puis choisir l'outil dans la fenêtre « Moore - Odoo » qui s'ouvre par-dessus Odoo.</li>
         <li><strong>Concordances TVA / chiffre d'affaires et rémunérations</strong> : contrôler l'exercice (proposé : le dernier exercice clôturé, exercices à cheval compris ; raccourcis « exercice en cours » et « jusqu'au dernier trimestre terminé » pour une situation) et la périodicité TVA (reprise d'Odoo), cocher la concordance TVA et/ou rémunérations, puis cliquer sur <strong>Générer les fichiers Excel</strong>.</li>
         <li><strong>Grands livres clients et fournisseurs (postes ouverts)</strong> : saisir la <strong>date d'arrêtée</strong> (proposée : fin du mois précédent ; une date future est signalée). Une fenêtre affiche les deux classeurs <strong>Postes ouverts</strong> (lignes lues, partenaires avec solde, total) : cliquer sur <strong>Télécharger</strong> pour chacun.</li>
         <li><strong>Tableau d'amortissements (100 % et déductible)</strong> : contrôler l'exercice (proposé : le dernier exercice clôturé), puis cliquer sur <strong>Générer le tableau Excel</strong>. Si Odoo signale des écritures en brouillon dans l'exercice (amortissements de l'année pas encore comptabilisés), le favori demande s'il faut les reprendre.</li>
@@ -220,7 +228,7 @@
     </div>
   </section>
 
-  <section class="card">
+  <section data-o="odoo" class="card">
     <h2>Ce que produit le favori</h2>
     <div class="two">
       <div>
@@ -294,7 +302,7 @@
       <li>Onglets des concordances : <strong>Détail par période</strong> (pour localiser un écart), <strong>Écritures</strong> (détail filtrable), <strong>Contrôles</strong> (brouillons, verrouillage TVA, cohérence du rapport) et <strong>Extraction</strong> (traçabilité).</li>
       <li>Uniquement les écritures <strong>comptabilisées</strong>. Dans les concordances, totaux, écarts et statuts sont des <strong>formules</strong> : les choix O/N et les montants encodés se recalculent immédiatement.</li>
       <li>Le favori ne fait que <strong>lire</strong> : rien n'est modifié dans Odoo. Les fichiers sont construits dans le navigateur ; plus de JSON, de PowerShell ni d'Excel piloté en arrière-plan.</li>
-      <li><strong>Mise à jour automatique</strong> : le favori ne contient plus le code. À chaque clic, il charge la dernière version publiée (fichier <code>moore-odoo.js</code>, à côté de cette page). Aucune donnée comptable ne part vers GitHub : le code est seulement téléchargé, puis il s'exécute dans votre navigateur (GitHub voit uniquement l'adresse de la base Odoo depuis laquelle le favori est cliqué).</li>
+      <li><strong>Mise à jour automatique</strong> : le favori ne contient plus le code. À chaque clic, il charge la dernière version publiée des outils Odoo (fichier <code>moore-odoo.js</code>, à côté de cette page). Aucune donnée comptable ne part vers GitHub : le code est seulement téléchargé, puis il s'exécute dans votre navigateur (GitHub voit uniquement l'adresse de la base Odoo depuis laquelle le favori est cliqué).</li>
       <li>Concordances, grand livre et postes ouverts <strong>marqués pour Excel</strong> (propriétés du document et noms définis) : le complément « Moore - Outils » les reconnaît et retrouve le dossier dans DIA par le n° d'entreprise.</li>
     </ul>
     <h3>Statut en haut de chaque concordance</h3>
@@ -306,7 +314,7 @@
     </table>
   </section>
 
-  <section class="card">
+  <section data-o="odoo" class="card">
     <h2>Messages possibles</h2>
     <table>
       <tr><th>Message</th><th>Que faire</th></tr>
@@ -333,18 +341,18 @@
       <tr><td>Pièce « sans document » (orange dans l'index)<br><span class="tag">Documents</span></td><td>Odoo n'a ni PDF ni pièce jointe pour cette pièce (le favori ne crée pas le PDF d'une facture). Facture client : vérifier la facture dans Odoo, puis relancer si besoin. Facture fournisseur : document à joindre dans Odoo ou à demander au client.</td></tr>
       <tr><td>Erreur de téléchargement (onglet Contrôles de l'index)<br><span class="tag">Documents</span></td><td>Session Odoo expirée, document supprimé ou accès refusé : se reconnecter à Odoo et relancer le favori.</td></tr>
       <tr><td>Documents trop volumineux pour un seul fichier<br><span class="tag">Documents</span></td><td>Plus de 2 Go de documents (confirmation demandée dès 400 Mo) : réduire la période, par exemple un trimestre à la fois.</td></tr>
-      <tr><td>Moore - Odoo : code en ligne inaccessible<br><span class="tag">Favori</span></td><td>Pas de connexion internet, ou la page bloque le chargement du code. Réessayer ; si le message reste, utiliser le <strong>code de secours</strong> (ci-dessous) et prévenir Queenie.</td></tr>
-      <tr><td>Moore - Odoo : code en ligne introuvable (HTTP 404)<br><span class="tag">Favori</span></td><td>Le fichier publié a été déplacé ou renommé sur GitHub. Prévenir Queenie.</td></tr>
+      <tr><td>Moore : code en ligne inaccessible<br><span class="tag">Favori</span></td><td>Pas de connexion internet, ou la page bloque le chargement du code. Réessayer ; si le message reste, utiliser le <strong>code de secours</strong> (ci-dessous) et prévenir Queenie.</td></tr>
+      <tr><td>Moore : code en ligne introuvable (HTTP 404…)<br><span class="tag">Favori</span></td><td>Le fichier publié a été déplacé ou renommé sur GitHub. Prévenir Queenie.</td></tr>
       <tr><td>Sur la page Mes bases Odoo, la fenêtre propose « Concordances » et « Grands livres »<br><span class="tag">Mes bases Odoo</span></td><td>C'est un ancien favori (avant 3.1) : le supprimer de la barre et glisser celui de cette page. La fenêtre doit afficher v3.6.0 (ou plus récent) et lire directement la liste de vos bases.</td></tr>
       <tr><td>Liste non lue<br><span class="tag">Mes bases Odoo</span></td><td>Vous n'êtes pas connecté(e) à odoo.com ou la session a expiré : ouvrez la page Mes bases Odoo, connectez-vous, puis recliquez sur le favori.</td></tr>
       <tr><td>Rien ne se passe au clic</td><td>Vérifier que le favori a bien été glissé depuis cette page (pas copié depuis un ancien fichier). Sinon, utiliser le <strong>code de secours</strong> (ci-dessous), qui fait exactement la même chose que le favori. Prévenir Queenie.</td></tr>
     </table>
   </section>
 
-  <section class="card" id="secours-carte">
-    <h2>Si rien ne se passe au clic : code de secours</h2>
+  <section data-o="odoo" class="card" id="secours-carte-odoo">
+    <h2>Si rien ne se passe au clic dans Odoo : code de secours</h2>
     <p>Le code de secours est le code publié (le même que celui que charge le favori), à coller dans la console du navigateur.</p>
-    <p><button class="copy primary" id="secours" type="button">Copier le code de secours</button><span id="secoursmsg" class="msg" aria-live="polite"></span></p>
+    <p><button class="copy primary" id="secours-odoo" type="button">Copier le code de secours</button><span id="secoursmsg-odoo" class="msg" aria-live="polite"></span></p>
     <ol class="small">
       <li>Ouvrir la base Odoo du client et vérifier la société active.</li>
       <li><span data-b="chrome edge"><kbd>F12</kbd> &gt; onglet <strong>Console</strong></span><span data-b="firefox"><kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>K</kbd> (console web)</span>.</li>
@@ -353,7 +361,7 @@
     </ol>
   </section>
 
-  <section class="card">
+  <section data-o="odoo" class="card">
     <h2>Paramétrage des comptes</h2>
     <p class="hint">Chaque compte suit la règle dont la <strong>racine est la plus longue</strong> : par exemple <code>746</code> = N mais <code>7464</code> = O, donc 746400 « Frais facturés » est repris et 746000 « Récupération salaire garanti » est seulement listé. <code>inclure</code> : "O" repris, "N" listé pour information (modifiable ensuite dans Excel). Rémunérations : <code>section</code> D = dirigeants, P = personnel, F = dépenses incombant à la société. <code>regularisations</code> : comptes dont les soldes d'ouverture et de clôture justifient la différence TVA.</p>
     <p class="hint">Le paramétrage est commun à tout le cabinet : il se trouve en tête du fichier <code>moore-odoo.js</code> publié (entre <code>PARAMETRAGE-DEBUT</code> et <code>PARAMETRAGE-FIN</code>). Une modification publiée vaut pour tous les favoris au clic suivant.</p>
@@ -363,43 +371,159 @@
     </details>
   </section>
 
+  <section data-o="mmf" class="card step">
+    <div class="num">3</div>
+    <div>
+      <h2>Utilisation</h2>
+      <ol class="small">
+        <li>Se connecter à <strong>MyMinfin</strong> en tant que mandataire, puis choisir le client (<em>Sélectionner un client</em>) : son nom et son n° d'entreprise s'affichent en haut à droite.</li>
+        <li>Cliquer sur <span data-b="chrome edge">le favori</span><span data-b="firefox">le marque-page</span> <strong>Moore</strong> : dans MyMinfin, il ouvre les outils « Moore - MyMinfin ». Sur <em>Mes paiements</em> ou <em>Mes documents</em>, l'outil s'ouvre directement. Ailleurs dans MyMinfin, une fenêtre propose le choix et ouvre la bonne page.</li>
+        <li><strong>Compte-provisions, dettes et remboursements TVA</strong> (<em>Mes paiements</em>, blocs ouverts ou fermés : le favori ouvre ceux dont il a besoin puis les referme) : un panneau s'ouvre en haut à droite avec le montant disponible, les dettes TVA à payer (et la plus ancienne échéance), les remboursements TVA à venir et ceux dont l'échéance est passée, et les paiements en attente. Cliquer sur <strong>Télécharger l’Excel</strong> (classeur aux couleurs de Moore, comme les concordances) ou sur <strong>Enregistrer en PDF</strong> (page A4 comme la fiche TVA : choisir l'imprimante « Enregistrer au format PDF », puis le dossier du client). Ou <strong>Copier le détail</strong>, <strong>Copier la ligne récap</strong> (une ligne par client, pour un tableau de suivi) ou <strong>Copier en-tête + ligne récap</strong> (la première fois), puis coller dans Excel (<kbd>Ctrl</kbd> + <kbd>V</kbd>).</li>
+        <li><strong>Documents</strong> (<em>Mes documents</em>) : choisir d'abord l'onglet (<em>Mes Documents</em>, <em>Autres documents mis à disposition</em>…) et, si besoin, filtrer avec les filtres MyMinfin (type, date de publication). Dans le panneau, filtrer au besoin par <strong>année</strong> ou par <strong>période</strong>, puis cliquer sur <strong>Télécharger en ZIP</strong> : un seul fichier ZIP à la fin, avec tous les documents et leur liste. <strong>Fichiers séparés</strong> donne un fichier par document. Les cases permettent d'en retirer.</li>
+        <li>En fichiers séparés, au deuxième fichier, <span data-b="chrome">Chrome</span><span data-b="edge">Edge</span><span data-b="firefox">Firefox</span> demande s'il peut télécharger plusieurs fichiers : <strong>Autoriser</strong>.<span data-b="chrome edge"> S'il demande où enregistrer chaque fichier : Paramètres &gt; Téléchargements &gt; désactiver « Demander dans quel dossier enregistrer chaque fichier ».</span><span data-b="firefox"> Selon vos réglages, Firefox peut demander où enregistrer chaque fichier.</span></li>
+      </ol>
+      <p class="hint">Excel : <strong>&lt;AAAA-MM-JJ&gt; - Compte-provisions TVA - &lt;CLIENT&gt;.xlsx</strong> ; PDF : même nom proposé, en <strong>.pdf</strong>. ZIP : <strong>&lt;CLIENT&gt; - documents MyMinfin - &lt;AAAA-MM-JJ&gt;.zip</strong> (avec l'année ou l'onglet si filtrés), qui contient <strong>&lt;AAAA-MM-JJ&gt; - &lt;Nom du document&gt;.pdf</strong> et <strong>_Liste des documents.csv</strong>. Fichiers séparés : <strong>&lt;CLIENT&gt; - &lt;AAAA-MM-JJ&gt; - &lt;Nom du document&gt;.pdf</strong>. Tout arrive dans <strong>Téléchargements</strong>. <strong>Copier le journal</strong> donne la liste à coller dans Excel.</p>
+    </div>
+  </section>
+
+  <section data-o="mmf" class="card">
+    <h2>Ce que fait le favori</h2>
+    <div class="two">
+      <div>
+        <h3>Compte-provisions, dettes et remboursements TVA</h3>
+        <ul class="small">
+          <li>Ouvre un instant les blocs fermés de <em>Mes paiements</em> (dettes, provisions TVA, paiements en ligne), attend leur chargement, puis les referme.</li>
+          <li><strong>Montant disponible</strong> sur le compte-provisions TVA et <strong>détail des provisions</strong> (type, référence, date valeur, montant).</li>
+          <li><strong>Dettes actuelles et remboursements</strong> : référence, type, <strong>nature</strong> (dette ou remboursement), échéance, montant initial, solde. MyMinfin ne les distingue pas à l'écran : le favori utilise un instant le filtre « Montant initial » du tableau, puis le remet sur « Tout ».</li>
+          <li>Totaux : dettes TVA à payer (plus ancienne échéance), remboursements TVA à venir, remboursements dont l'échéance est passée (à rapprocher de la banque).</li>
+          <li><strong>Paiements en attente</strong> et date de mise à jour des données SPF.</li>
+          <li>Contrôles : filtre actif sur le tableau, nombre de lignes annoncé par MyMinfin, détail des provisions = montant disponible, dettes sans solde affiché, dettes et remboursements non distingués.</li>
+          <li><strong>Excel</strong> : logo et en-tête Moore, fiche du dossier (profession, relation client, senior à compléter), chiffres clés (disponible, dettes TVA, remboursements à venir, position nette), tableaux avec totaux en formules et statut de chaque ligne (dette échue, remboursement à venir…), contrôle « Concordant / Écart à justifier », remarques internes, onglet Extraction ; prêt à imprimer sur une page.</li>
+          <li><strong>PDF</strong> : en-tête Moore, état de la lecture, chiffres clés, compte-provisions, synthèse, dettes et remboursements avec leur statut, paiements en attente, points d'attention ; une page A4 en général, sans l'adresse ni la date ajoutées par le navigateur.</li>
+          <li>Copies : montants et dates au format Excel belge (1697,63 ; 31/07/2026).</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Documents</h3>
+        <ul class="small">
+          <li>Liste des documents de l'onglet affiché, avec cases à cocher (tout cocher, tout décocher, actualiser).</li>
+          <li><strong>Mode rapide</strong> : le favori ouvre un menu <strong>⋮</strong> pour reprendre les en-têtes de MyMinfin, relit la liste des documents de MyMinfin, puis demande les fichiers directement, 3 à la fois. Les pièces jointes d'un document sont ajoutées à côté de lui.</li>
+          <li>À défaut (document non retrouvé dans la liste, refus de MyMinfin) : ouverture du menu <strong>⋮</strong> et clic sur <strong>Télécharger</strong>, un document à la fois, avec une pause entre deux.</li>
+          <li><strong>ZIP</strong> : un seul téléchargement à la fin, documents nommés <strong>date - nom du document</strong> (date du document comme date du fichier), plus la liste des documents (CSV). En cas d'arrêt, le ZIP contient les documents déjà récupérés.</li>
+          <li>Ou fichiers séparés, renommés <strong>CLIENT - date - nom du document</strong> ; doublons numérotés (2), (3)…</li>
+          <li>Filtres par année et par période de publication.</li>
+          <li>Statut par document (✔ / ✖, survoler pour le détail), journal copiable, bouton <strong>Arrêter</strong>. La liste se met à jour seule quand on change d'onglet.</li>
+          <li><strong>Copier le diagnostic</strong> (lien du panneau, toujours disponible) : libellés des menus, adresses appelées par MyMinfin et forme de leurs réponses (noms de champs et types uniquement, aucune valeur ni donnée client).</li>
+        </ul>
+      </div>
+    </div>
+    <ul class="checks" style="margin-top:12px">
+      <li>Compte-provisions : <strong>lecture seule</strong>. Les blocs fermés sont ouverts puis refermés ; seul le filtre « Montant initial » du tableau est utilisé un instant, puis remis sur « Tout ».</li>
+      <li>Documents : les mêmes clics qu'à la main. Le favori ne clique jamais sur une action du type supprimer, archiver, signaler ou répondre.</li>
+      <li>Rien n'est envoyé ailleurs : les copies vont dans le presse-papiers, les fichiers (Excel, ZIP, documents) dans Téléchargements.</li>
+      <li><strong>Mise à jour automatique</strong> : le favori ne contient plus le code. À chaque clic, il charge la dernière version publiée des outils MyMinfin (fichier <code>moore-myminfin.js</code>, à côté de cette page). Aucune donnée ne part vers GitHub : le code est seulement téléchargé, puis il s'exécute dans votre navigateur (GitHub voit uniquement que la demande vient du site MyMinfin).</li>
+      <li>Le favori lit la page affichée (le SPF ne propose pas d'accès direct pour le compte-provisions) : si MyMinfin change sa présentation, le favori le signale et une mise à jour sera nécessaire.</li>
+    </ul>
+  </section>
+
+  <section data-o="mmf" class="card">
+    <h2>Messages possibles</h2>
+    <table>
+      <tr><th>Message</th><th>Que faire</th></tr>
+      <tr><td>Ouvrez MyMinfin (connecté, client sélectionné) avant de cliquer sur le favori</td><td>Le favori a été cliqué hors de MyMinfin. Ouvrez MyMinfin, connectez-vous, sélectionnez le client, puis recliquez.</td></tr>
+      <tr><td>Aucun client sélectionné<br><span class="tag">Fenêtre</span> <span class="tag">Panneaux</span></td><td>Les données affichées sont celles du profil connecté. Choisir le client (<em>Sélectionner un client</em>), puis recliquer.</td></tr>
+      <tr><td>Bloc « … » : contenu pas chargé après 20 s<br><span class="tag">Compte-provisions</span></td><td>MyMinfin a mis trop de temps à charger le bloc : recliquer sur le favori. Les montants de ce bloc sont marqués « non lu » dans l'Excel.</td></tr>
+      <tr><td>Bloc « … » : il ne s'est pas ouvert<br><span class="tag">Compte-provisions</span></td><td>Ouvrir le bloc à la main, puis recliquer. Si cela se répète : <em>Copier le diagnostic</em> (lien en bas du panneau) et l'envoyer à Queenie.</td></tr>
+      <tr><td>Aucun montant disponible affiché dans « Gérer mes provisions TVA »<br><span class="tag">Compte-provisions</span></td><td>Le bloc s'ouvre mais n'affiche pas de montant : client sans compte-provisions TVA, à vérifier dans le bloc.</td></tr>
+      <tr><td>Un filtre est actif sur le tableau des dettes<br><span class="tag">Compte-provisions</span></td><td>Remettre le type sur « Tout », vider les dates du tableau <em>Consulter mes dettes actuelles et remboursements</em>, puis recliquer.</td></tr>
+      <tr><td>Colonne « Solde » vide sur … dette(s) TVA<br><span class="tag">Compte-provisions</span></td><td>MyMinfin n'affiche pas de solde pour ces dettes : le montant initial est repris. Vérifier une ligne avec le bouton <em>Détail</em> avant d'utiliser le total.</td></tr>
+      <tr><td>Dettes et remboursements non distingués<br><span class="tag">Compte-provisions</span></td><td>Le filtre « Montant initial » n'a pas répondu : toutes les lignes TVA sont comptées comme dettes. Les trier à la main avec ce filtre (Remboursements / Dettes) et prévenir Queenie.</td></tr>
+      <tr><td>Remboursements TVA – échéance passée<br><span class="tag">Compte-provisions</span></td><td>Pas une erreur : MyMinfin garde un temps les remboursements déjà exécutés. Vérifier qu'ils sont bien arrivés en banque (compte courant TVA 411200).</td></tr>
+      <tr><td>Dettes échues non soldées : TVA … ; hors TVA …<br><span class="tag">Compte-provisions</span></td><td>Dettes dont l'échéance est passée et qui restent ouvertes dans MyMinfin (des intérêts de retard courent) : à régulariser avec le client, ou à vérifier si un paiement attend son affectation.</td></tr>
+      <tr><td>Provisions disponibles alors que des dettes TVA sont ouvertes · Paiement du … = montant initial de la dette TVA …<br><span class="tag">Compte-provisions</span></td><td>Un paiement est resté sur le compte-provisions au lieu d'être affecté à sa dette (MyMinfin signale des retards d'affectation). Vérifier dans MyMinfin et, si la dette reste ouverte, demander l'affectation au SPF (les intérêts liés à l'incident doivent être adaptés).</td></tr>
+      <tr><td>Le détail des provisions ne correspond pas au montant disponible<br><span class="tag">Compte-provisions</span></td><td>Vérifier dans MyMinfin (affectation en cours côté SPF). Prévenir Queenie si l'écart persiste.</td></tr>
+      <tr><td>Page non reconnue · Rien n'a pu être lu<br><span class="tag">Compte-provisions</span></td><td>Cliquer sur <em>Copier le diagnostic</em> (aucun montant dedans) et l'envoyer à Queenie.</td></tr>
+      <tr><td>✖ pas d'action de téléchargement dans le menu<br><span class="tag">Documents</span></td><td>Le menu ⋮ de ce document ne propose pas de téléchargement. Cliquer sur <em>Copier le diagnostic</em> (sans données personnelles) et l'envoyer à Queenie.</td></tr>
+      <tr><td>✖ aucun téléchargement détecté<br><span class="tag">Documents</span></td><td>Regarder quand même dans Téléchargements. Si le fichier n'y est pas : <em>Copier le diagnostic</em> et l'envoyer à Queenie.</td></tr>
+      <tr><td>✖ liste modifiée : clique « Actualiser la liste »<br><span class="tag">Documents</span></td><td>La liste se met à jour seule quand l'onglet ou les filtres MyMinfin changent ; si un document reste en ✖, cliquer sur <em>Actualiser la liste</em> et relancer.</td></tr>
+      <tr><td>✖ MyMinfin ouvre une autre application (…)<br><span class="tag">Documents</span></td><td>Ce document ne s'ouvre pas dans MyMinfin mais dans une autre application du SPF : le favori ne peut pas le récupérer. Le télécharger à la main depuis cette application.</td></tr>
+      <tr><td>✖ MyMinfin a ouvert une autre page (…)<br><span class="tag">Documents</span></td><td>Le favori s'arrête pour ne pas se perdre. Revenir à <em>Mes documents</em>, puis <em>Copier le diagnostic</em> et l'envoyer à Queenie.</td></tr>
+      <tr><td>Les fichiers n'arrivent plus après le premier (fichiers séparés)<br><span class="tag">Documents</span></td><td>Le navigateur bloque les téléchargements multiples : cliquer sur l'icône de téléchargement bloqué dans la barre d'adresse &gt; toujours autoriser minfin.fgov.be, puis relancer pour les documents en ✖.</td></tr>
+      <tr><td>Liste paginée : seule la page affichée est prise en compte<br><span class="tag">Documents</span></td><td>Traiter la liste page par page, ou réduire la liste avec les filtres MyMinfin.</td></tr>
+      <tr><td>Mode rapide : refus de MyMinfin (repris par le menu)<br><span class="tag">Documents</span></td><td>Rien à faire : le document a été récupéré par le menu ⋮. Si cela arrive pour tous les documents, envoyer le diagnostic à Queenie.</td></tr>
+      <tr><td>Session MyMinfin expirée<br><span class="tag">Documents</span></td><td>Le favori s'arrête. Se reconnecter à MyMinfin, resélectionner le client, puis relancer pour les documents restants.</td></tr>
+      <tr><td>Moore : code en ligne inaccessible<br><span class="tag">Favori</span></td><td>Pas de connexion internet, ou MyMinfin bloque le chargement du code. Réessayer ; si le message reste, utiliser le <strong>code de secours</strong> (ci-dessous) et prévenir Queenie.</td></tr>
+      <tr><td>Moore : code en ligne introuvable (HTTP 404…)<br><span class="tag">Favori</span></td><td>Le fichier publié a été déplacé ou renommé sur GitHub. Prévenir Queenie.</td></tr>
+      <tr><td>Rien ne se passe au clic</td><td>Vérifier que le favori a bien été glissé depuis cette page (pas copié depuis un ancien fichier). Sinon, MyMinfin peut bloquer les favoris : utiliser le <strong>code de secours</strong> (ci-dessous), qui fait exactement la même chose. Prévenir Queenie.</td></tr>
+    </table>
+  </section>
+
+  <section data-o="mmf" class="card" id="secours-carte-mmf">
+    <h2>Si rien ne se passe au clic dans MyMinfin : code de secours</h2>
+    <p>Le code de secours est le code publié (le même que celui que charge le favori), à coller dans la console du navigateur.</p>
+    <p><button class="copy primary" id="secours-mmf" type="button">Copier le code de secours</button><span id="secoursmsg-mmf" class="msg" aria-live="polite"></span></p>
+    <ol class="small">
+      <li>Ouvrir MyMinfin et sélectionner le client.</li>
+      <li><span data-b="chrome edge"><kbd>F12</kbd> &gt; onglet <strong>Console</strong></span><span data-b="firefox"><kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>K</kbd> (console web)</span>.</li>
+      <li>Coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>), puis <kbd>Entrée</kbd>. La première fois, le navigateur demande de taper <span data-b="chrome edge"><strong>allow pasting</strong></span><span data-b="firefox">le texte qu'il indique (<strong>autoriser le collage</strong>)</span>, puis de coller à nouveau.</li>
+      <li>Prévenir Queenie.</li>
+    </ol>
+  </section>
+
   <section class="card">
     <h2>Déploiement par stratégie de groupe (informaticien, facultatif)</h2>
-    <p class="hint">Plutôt que de faire glisser les favoris par chacun, l'informaticien peut les placer dans la barre de tous les utilisateurs par stratégie de groupe : Chrome « ManagedBookmarks », Edge « ManagedFavorites », Firefox « ManagedBookmarks ». Le même texte convient aux trois et contient les deux favoris du cabinet (Moore - Odoo et Moore - MyMinfin). Ils apparaissent alors dans un dossier « Moore » de la barre, que l'utilisateur ne peut pas modifier.</p>
+    <p class="hint">Plutôt que de faire glisser le favori par chacun, l'informaticien peut le placer dans la barre de tous les utilisateurs par stratégie de groupe : Chrome « ManagedBookmarks », Edge « ManagedFavorites », Firefox « ManagedBookmarks ». Le même texte convient aux trois. Le favori « Moore » apparaît alors dans un dossier « Moore » de la barre, que l'utilisateur ne peut pas modifier.</p>
     <p class="hint">À tester d'abord sur un poste (page <code>chrome://policy</code>, <code>edge://policy</code> ou <code>about:policies</code>) : Firefox accepte les favoris « javascript: » dans cette stratégie depuis sa version 153 ; pour Chrome et Edge, aucune documentation ne le confirme.</p>
     <p><button class="copy" id="copygpo" type="button">Copier le texte de la stratégie</button><span id="copygpomsg" class="msg" aria-live="polite"></span></p>
     <pre class="json" id="gpo">Disponible quand cette page est ouverte depuis son adresse GitHub Pages.</pre>
   </section>
 
   <div class="callout">
-    <strong>Mise à jour :</strong> à partir de la version 3.6, le favori se met à jour tout seul. Il suffit de l'installer une dernière fois : supprimer l'ancien « Moore - Odoo » (clic droit &gt; Supprimer), ainsi que « Moore - Grand livre » et « Moore - Documents » sous Firefox et les anciens « Concordances » et « Export GL partenaires », puis glisser le nouveau (étape 2). Vérification : la fenêtre du favori affiche « Moore - Odoo v3.6.0 » (ou plus récent).
+    <strong>Mise à jour :</strong> un seul favori « Moore » remplace désormais « Moore - Odoo » et « Moore - MyMinfin », et il se met à jour tout seul. Il suffit de l'installer une dernière fois : supprimer les anciens favoris (clic droit &gt; Supprimer) « Moore - Odoo » et « Moore - MyMinfin », ainsi que « Moore - Grand livre » et « Moore - Documents » sous Firefox et les anciens « Concordances » et « Export GL partenaires », puis glisser le nouveau (étape 2). Vérification : dans une base Odoo, la fenêtre du favori affiche « Moore - Odoo v3.6.0 » ; dans MyMinfin, « Moore - MyMinfin v1.7.0 » (ou plus récent).
   </div>
 </main>
 
-<footer>Favori Moore - Odoo - version 3.6.0 - 26/10/2026 - mise à jour automatique - Chrome, Edge, Firefox - lecture seule</footer>
+<footer>Favori Moore - outils Moore - Odoo 3.6.0 et Moore - MyMinfin 1.7.0 - 26/10/2026 - mise à jour automatique - Chrome, Edge, Firefox</footer>
+
 <script>
   (function () {
-    /* Réglages de la page : fichier publié chargé par le favori, nom du favori, favoris de la stratégie de groupe */
-    var CFG = {"fichier": "moore-odoo.js", "nom": "Moore - Odoo", "console": "d'Odoo", "gpo": [{"nom": "Moore - Odoo", "fichier": "moore-odoo.js"}, {"nom": "Moore - MyMinfin", "fichier": "moore-myminfin.js"}]};
+    function el(id) { return document.getElementById(id); }
 
     /* Choix du navigateur : détecté automatiquement, modifiable par l'utilisateur (ne change que les consignes) */
     var ua = navigator.userAgent;
     var detecte = /Firefox\//.test(ua) ? "firefox" : /Edg\//.test(ua) ? "edge" : /Chrome\//.test(ua) ? "chrome" : null;
     var noms = { chrome: "Chrome", edge: "Edge", firefox: "Firefox" };
-    var boutons = document.querySelectorAll(".seg button");
+    var boutonsNav = document.querySelectorAll("button[data-choix]");
     function choisir(nav) {
       document.body.setAttribute("data-nav", nav);
-      for (var i = 0; i < boutons.length; i++) {
-        boutons[i].setAttribute("aria-selected", boutons[i].getAttribute("data-choix") === nav ? "true" : "false");
+      for (var i = 0; i < boutonsNav.length; i++) {
+        boutonsNav[i].setAttribute("aria-selected", boutonsNav[i].getAttribute("data-choix") === nav ? "true" : "false");
       }
     }
-    for (var i = 0; i < boutons.length; i++) {
-      boutons[i].addEventListener("click", function () { choisir(this.getAttribute("data-choix")); });
+    for (var i = 0; i < boutonsNav.length; i++) {
+      boutonsNav[i].addEventListener("click", function () { choisir(this.getAttribute("data-choix")); });
     }
     if (detecte) {
       choisir(detecte);
-      document.getElementById("detect").textContent = "(" + noms[detecte] + " détecté)";
+      el("detect").textContent = "(" + noms[detecte] + " détecté)";
     }
+
+    /* Mode d'emploi affiché : outils Odoo ou outils MyMinfin (adresse de la page terminée par #myminfin pour MyMinfin) */
+    var boutonsOutil = document.querySelectorAll("button[data-outil]");
+    function montrer(outil) {
+      document.body.setAttribute("data-outil", outil);
+      for (var i = 0; i < boutonsOutil.length; i++) {
+        boutonsOutil[i].setAttribute("aria-selected", boutonsOutil[i].getAttribute("data-outil") === outil ? "true" : "false");
+      }
+    }
+    for (var j = 0; j < boutonsOutil.length; j++) {
+      boutonsOutil[j].addEventListener("click", function () {
+        var o = this.getAttribute("data-outil");
+        montrer(o);
+        try { history.replaceState(null, "", o === "mmf" ? "#myminfin" : location.pathname + location.search); } catch (err) { /* sans importance */ }
+      });
+    }
+    montrer(/^#myminfin$/i.test(location.hash) ? "mmf" : "odoo");
 
     /* Copie dans le presse-papiers (repli sur une zone de texte si l'accès direct est refusé) */
     function copier(texte, m, reussite, echec) {
@@ -421,23 +545,28 @@
       }
     }
     function nonDispo(m, texte) { m.className = "msg warn"; m.textContent = texte; }
-    function el(id) { return document.getElementById(id); }
 
-    /* Le favori : un petit chargeur fixe qui télécharge, à chaque clic, le code publié à côté de cette page */
+    /* Le favori : un petit chargeur fixe. À chaque clic, il charge moore.js (publié à côté de cette page),
+       qui charge à son tour les outils du site ouvert : moore-myminfin.js dans MyMinfin, moore-odoo.js ailleurs. */
     var lien = el("bm"), info = el("bminfo"), etat = el("etat");
-    function adresseDe(fichier) { return new URL(fichier, location.href).href.split("#")[0].split("?")[0]; }
-    function sure(u) { return /^https?:\/\/[^'"\\%\s<>`]+$/.test(u); }
-    var adresse = adresseDe(CFG.fichier);
+    var BASE = new URL(".", location.href).href.split("#")[0].split("?")[0];
     var publiee = location.protocol === "https:" || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
-    var CHARGEUR = null, CODE = null;
+    var sure = /^https?:\/\/[^'"\\%\s<>`]+\/$/.test(BASE);
+    var CHARGEUR = null, CODES = {};
+    var FICHIERS = [
+      { cle: "aiguillage", fichier: "moore.js", motif: /^\/\* Moore v(\d+\.\d+\.\d+)/ },
+      { cle: "odoo", fichier: "moore-odoo.js", nom: "Moore - Odoo", motif: /Moore - Odoo v(\d+\.\d+\.\d+)/ },
+      { cle: "mmf", fichier: "moore-myminfin.js", nom: "Moore - MyMinfin", motif: /Moore - MyMinfin v(\d+\.\d+\.\d+)/ }
+    ];
 
-    function chargeur(u, nom) {
-      return "javascript:(async()=>{try{const r=await fetch('" + u + "?v='+Date.now(),{cache:'no-store',referrerPolicy:'no-referrer'})" +
+    function chargeur(b) {
+      return "javascript:(async()=>{try{const b='" + b + "';window.__moore={base:b};" +
+        "const r=await fetch(b+'moore.js?v='+Date.now(),{cache:'no-store',referrerPolicy:'no-referrer'})" +
         ".catch(e=>{throw new Error('code en ligne inaccessible ('+e.message+')')});" +
-        "if(!r.ok)throw new Error('code en ligne introuvable (HTTP '+r.status+')');" +
+        "if(!r.ok)throw new Error('code en ligne introuvable (HTTP '+r.status+', moore.js)');" +
         "const t=await r.text();" +
         "try{(0,eval)(t)}catch(e){if(!(e instanceof EvalError))throw e;const s=document.createElement('script');s.textContent=t;document.head.append(s);s.remove()}" +
-        "}catch(e){alert('" + nom + " : '+e.message)}})()";
+        "}catch(e){alert('Moore : '+e.message)}})()";
     }
 
     lien.addEventListener("click", function (e) {
@@ -447,44 +576,42 @@
       setTimeout(function () { m.hidden = true; }, 4000);
     });
 
-    if (!publiee || !sure(adresse)) {
+    if (!publiee || !sure) {
       info.textContent = "Cette page doit être ouverte depuis son adresse GitHub Pages (https://…github.io/…) : ouverte depuis un fichier, elle ne peut pas préparer le favori.";
       etat.className = "etat-code ko";
       etat.textContent = "Favori non disponible.";
     } else {
-      CHARGEUR = chargeur(adresse, CFG.nom);
+      CHARGEUR = chargeur(BASE);
       lien.setAttribute("href", CHARGEUR);
       lien.removeAttribute("aria-disabled");
-      info.textContent = "Favori prêt. À chaque clic, il charge la dernière version publiée : " + adresse;
+      info.textContent = "Favori prêt. À chaque clic, il charge la dernière version publiée des outils du site ouvert (" + BASE + ").";
+      el("gpo").textContent = JSON.stringify([{ toplevel_name: "Moore" }, { name: "Moore", url: CHARGEUR }]);
 
-      /* Texte de la stratégie de groupe (page qui en a une) : tous les favoris Moore publiés ici */
-      if (el("gpo")) {
-        var liste = [{ toplevel_name: "Moore" }];
-        for (var g = 0; g < CFG.gpo.length; g++) {
-          var a = adresseDe(CFG.gpo[g].fichier);
-          if (sure(a)) liste.push({ name: CFG.gpo[g].nom, url: chargeur(a, CFG.gpo[g].nom) });
+      /* Contrôle : les trois fichiers publiés sont-ils accessibles, et quelles versions ? */
+      Promise.all(FICHIERS.map(function (f) {
+        return fetch(BASE + f.fichier + "?v=" + Date.now(), { cache: "no-store" }).then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.text();
+        }).then(function (t) {
+          var v = f.motif.exec(t.slice(0, 400));
+          if (!v) throw new Error("fichier non reconnu");
+          CODES[f.cle] = t;
+          return { f: f, version: v[1] };
+        }, function (e) {
+          return { f: f, erreur: f.fichier + " : " + e.message };
+        });
+      })).then(function (res) {
+        var erreurs = res.filter(function (x) { return x.erreur; }).map(function (x) { return x.erreur; });
+        if (erreurs.length) {
+          etat.className = "etat-code ko";
+          etat.textContent = "Code en ligne incomplet (" + erreurs.join(" ; ") + ") : vérifier que les fichiers sont publiés à côté de cette page.";
+        } else {
+          etat.className = "etat-code ok";
+          etat.textContent = "Code en ligne : " + res.filter(function (x) { return x.f.nom; })
+            .map(function (x) { return x.f.nom + " v" + x.version; }).join(" et ") + ", publiés et accessibles.";
         }
-        el("gpo").textContent = JSON.stringify(liste);
-      }
-
-      /* Contrôle : le code publié est-il accessible, et quelle version ? */
-      fetch(adresse + "?v=" + Date.now(), { cache: "no-store" }).then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.text();
-      }).then(function (t) {
-        var v = new RegExp(CFG.nom + " v(\\d+\\.\\d+\\.\\d+)").exec(t.slice(0, 400));
-        if (!v) throw new Error("fichier publié non reconnu");
-        CODE = t;
-        etat.className = "etat-code ok";
-        etat.textContent = "Code en ligne : " + CFG.nom + " v" + v[1] + ", publié et accessible.";
-        if (el("params")) {
-          var p = /\/\*PARAMETRAGE-DEBUT\*\/([\s\S]*?)\/\*PARAMETRAGE-FIN\*\//.exec(t);
-          el("params").textContent = p ? p[1].trim() : "Paramétrage introuvable dans le fichier publié.";
-        }
-      }).catch(function (e) {
-        etat.className = "etat-code ko";
-        etat.textContent = "Code en ligne inaccessible (" + e.message + ") : vérifier que " + CFG.fichier + " est publié à côté de cette page.";
-        if (el("params")) el("params").textContent = "Fichier publié inaccessible.";
+        var p = CODES.odoo && /\/\*PARAMETRAGE-DEBUT\*\/([\s\S]*?)\/\*PARAMETRAGE-FIN\*\//.exec(CODES.odoo);
+        el("params").textContent = p ? p[1].trim() : "Paramétrage introuvable (moore-odoo.js inaccessible ou sans paramétrage).";
       });
     }
 
@@ -493,20 +620,21 @@
       if (!CHARGEUR) return nonDispo(m, "Favori non disponible : ouvrez la page depuis GitHub Pages.");
       copier(CHARGEUR, m, "Code copié. Collez-le dans le champ URL.", "Copie impossible : utilisez le glisser-déposer.");
     });
-    if (el("copygpo")) el("copygpo").addEventListener("click", function () {
+    el("copygpo").addEventListener("click", function () {
       var m = el("copygpomsg");
       if (!CHARGEUR) return nonDispo(m, "Disponible depuis l'adresse GitHub Pages seulement.");
       copier(el("gpo").textContent, m, "Texte copié.", "Copie impossible : sélectionnez le texte ci-dessous.");
     });
 
-    /* Code de secours : le code publié, à coller dans la console du site */
-    el("secours").addEventListener("click", function () {
-      var m = el("secoursmsg");
-      if (!CODE) return nonDispo(m, "Code publié inaccessible pour l'instant : réessayez dans un moment.");
-      copier(CODE, m, "Code de secours copié : collez-le dans la console " + CFG.console + ".", "Copie impossible : réessayez dans Chrome ou Edge.");
+    /* Codes de secours : le code publié de chaque outil, à coller dans la console du site */
+    [["odoo", "d'Odoo"], ["mmf", "de MyMinfin"]].forEach(function (x) {
+      el("secours-" + x[0]).addEventListener("click", function () {
+        var m = el("secoursmsg-" + x[0]);
+        if (!CODES[x[0]]) return nonDispo(m, "Code publié inaccessible pour l'instant : réessayez dans un moment.");
+        copier(CODES[x[0]], m, "Code de secours copié : collez-le dans la console " + x[1] + ".", "Copie impossible : réessayez dans Chrome ou Edge.");
+      });
     });
   })();
 </script>
-
 </body>
 </html>
