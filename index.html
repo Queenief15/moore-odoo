@@ -126,6 +126,8 @@
   .etat-code.ko { color: var(--accent); }
   .bookmarklet[aria-disabled="true"] { background: #9AA3B5; border-color: #C9CFD6; cursor: not-allowed; }
   pre.json { white-space: pre-wrap; word-break: break-all; margin: 10px 0 0; font: 12px/1.45 Consolas, monospace; background: #F7F9FC; border: 1px solid var(--line); border-radius: 6px; padding: 10px; max-height: 260px; overflow: auto; }
+  header p.autre { margin-top: 8px; font-size: 13px; }
+  header p.autre a { color: #fff; font-weight: 600; }
 </style>
 </head>
 <body data-nav="chrome">
@@ -134,6 +136,7 @@
     <div class="firm">Moore Walcourt - outils internes</div>
     <h1>Favori Moore - Odoo <span class="ver">version 3.6.0</span></h1>
     <p>Un seul favori, à installer une seule fois : il se met ensuite à jour tout seul, chaque clic charge la dernière version publiée. Ensuite, depuis la base Odoo du client : un clic sur « Moore - Odoo », puis le choix de l’outil : concordances TVA / chiffre d’affaires et rémunérations, grands livres clients et fournisseurs, tableau d’amortissements, grand livre des comptes ou documents clients et fournisseurs (factures PDF). Sur la page Mes bases Odoo (odoo.com), le même favori télécharge la liste de vos bases. Les fichiers sont repris par Excel.</p>
+    <p class="autre">Autre favori du cabinet : <a href="myminfin.html">Moore - MyMinfin</a> (compte-provisions TVA et documents MyMinfin).</p>
   </div>
 </header>
 
@@ -362,7 +365,7 @@
 
   <section class="card">
     <h2>Déploiement par stratégie de groupe (informaticien, facultatif)</h2>
-    <p class="hint">Plutôt que de faire glisser le favori par chacun, l'informaticien peut le placer dans la barre de tous les utilisateurs par stratégie de groupe : Chrome « ManagedBookmarks », Edge « ManagedFavorites », Firefox « ManagedBookmarks ». Le même texte convient aux trois. Le favori apparaît alors dans un dossier « Moore » de la barre, que l'utilisateur ne peut pas modifier.</p>
+    <p class="hint">Plutôt que de faire glisser les favoris par chacun, l'informaticien peut les placer dans la barre de tous les utilisateurs par stratégie de groupe : Chrome « ManagedBookmarks », Edge « ManagedFavorites », Firefox « ManagedBookmarks ». Le même texte convient aux trois et contient les deux favoris du cabinet (Moore - Odoo et Moore - MyMinfin). Ils apparaissent alors dans un dossier « Moore » de la barre, que l'utilisateur ne peut pas modifier.</p>
     <p class="hint">À tester d'abord sur un poste (page <code>chrome://policy</code>, <code>edge://policy</code> ou <code>about:policies</code>) : Firefox accepte les favoris « javascript: » dans cette stratégie depuis sa version 153 ; pour Chrome et Edge, aucune documentation ne le confirme.</p>
     <p><button class="copy" id="copygpo" type="button">Copier le texte de la stratégie</button><span id="copygpomsg" class="msg" aria-live="polite"></span></p>
     <pre class="json" id="gpo">Disponible quand cette page est ouverte depuis son adresse GitHub Pages.</pre>
@@ -376,6 +379,9 @@
 <footer>Favori Moore - Odoo - version 3.6.0 - 26/10/2026 - mise à jour automatique - Chrome, Edge, Firefox - lecture seule</footer>
 <script>
   (function () {
+    /* Réglages de la page : fichier publié chargé par le favori, nom du favori, favoris de la stratégie de groupe */
+    var CFG = {"fichier": "moore-odoo.js", "nom": "Moore - Odoo", "console": "d'Odoo", "gpo": [{"nom": "Moore - Odoo", "fichier": "moore-odoo.js"}, {"nom": "Moore - MyMinfin", "fichier": "moore-myminfin.js"}]};
+
     /* Choix du navigateur : détecté automatiquement, modifiable par l'utilisateur (ne change que les consignes) */
     var ua = navigator.userAgent;
     var detecte = /Firefox\//.test(ua) ? "firefox" : /Edg\//.test(ua) ? "edge" : /Chrome\//.test(ua) ? "chrome" : null;
@@ -415,80 +421,92 @@
       }
     }
     function nonDispo(m, texte) { m.className = "msg warn"; m.textContent = texte; }
+    function el(id) { return document.getElementById(id); }
 
     /* Le favori : un petit chargeur fixe qui télécharge, à chaque clic, le code publié à côté de cette page */
-    var lien = document.getElementById("bm");
-    var info = document.getElementById("bminfo");
-    var etat = document.getElementById("etat");
-    var adresse = new URL("moore-odoo.js", location.href).href.split("#")[0].split("?")[0];
+    var lien = el("bm"), info = el("bminfo"), etat = el("etat");
+    function adresseDe(fichier) { return new URL(fichier, location.href).href.split("#")[0].split("?")[0]; }
+    function sure(u) { return /^https?:\/\/[^'"\\%\s<>`]+$/.test(u); }
+    var adresse = adresseDe(CFG.fichier);
     var publiee = location.protocol === "https:" || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
-    var adresseSure = /^https?:\/\/[^'"\\%\s<>`]+$/.test(adresse);
     var CHARGEUR = null, CODE = null;
 
-    function chargeur(u) {
+    function chargeur(u, nom) {
       return "javascript:(async()=>{try{const r=await fetch('" + u + "?v='+Date.now(),{cache:'no-store',referrerPolicy:'no-referrer'})" +
         ".catch(e=>{throw new Error('code en ligne inaccessible ('+e.message+')')});" +
         "if(!r.ok)throw new Error('code en ligne introuvable (HTTP '+r.status+')');" +
         "const t=await r.text();" +
         "try{(0,eval)(t)}catch(e){if(!(e instanceof EvalError))throw e;const s=document.createElement('script');s.textContent=t;document.head.append(s);s.remove()}" +
-        "}catch(e){alert('Moore - Odoo : '+e.message)}})()";
+        "}catch(e){alert('" + nom + " : '+e.message)}})()";
     }
 
     lien.addEventListener("click", function (e) {
       e.preventDefault();
-      var m = document.getElementById("clickmsg");
+      var m = el("clickmsg");
       m.hidden = false;
       setTimeout(function () { m.hidden = true; }, 4000);
     });
 
-    if (!publiee || !adresseSure) {
+    if (!publiee || !sure(adresse)) {
       info.textContent = "Cette page doit être ouverte depuis son adresse GitHub Pages (https://…github.io/…) : ouverte depuis un fichier, elle ne peut pas préparer le favori.";
       etat.className = "etat-code ko";
       etat.textContent = "Favori non disponible.";
     } else {
-      CHARGEUR = chargeur(adresse);
+      CHARGEUR = chargeur(adresse, CFG.nom);
       lien.setAttribute("href", CHARGEUR);
       lien.removeAttribute("aria-disabled");
       info.textContent = "Favori prêt. À chaque clic, il charge la dernière version publiée : " + adresse;
-      document.getElementById("gpo").textContent = JSON.stringify([{ toplevel_name: "Moore" }, { name: "Moore - Odoo", url: CHARGEUR }]);
+
+      /* Texte de la stratégie de groupe (page qui en a une) : tous les favoris Moore publiés ici */
+      if (el("gpo")) {
+        var liste = [{ toplevel_name: "Moore" }];
+        for (var g = 0; g < CFG.gpo.length; g++) {
+          var a = adresseDe(CFG.gpo[g].fichier);
+          if (sure(a)) liste.push({ name: CFG.gpo[g].nom, url: chargeur(a, CFG.gpo[g].nom) });
+        }
+        el("gpo").textContent = JSON.stringify(liste);
+      }
 
       /* Contrôle : le code publié est-il accessible, et quelle version ? */
       fetch(adresse + "?v=" + Date.now(), { cache: "no-store" }).then(function (r) {
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.text();
       }).then(function (t) {
-        var v = /Moore - Odoo v(\d+\.\d+\.\d+)/.exec(t.slice(0, 400));
+        var v = new RegExp(CFG.nom + " v(\\d+\\.\\d+\\.\\d+)").exec(t.slice(0, 400));
         if (!v) throw new Error("fichier publié non reconnu");
         CODE = t;
         etat.className = "etat-code ok";
-        etat.textContent = "Code en ligne : Moore - Odoo v" + v[1] + ", publié et accessible.";
-        var p = /\/\*PARAMETRAGE-DEBUT\*\/([\s\S]*?)\/\*PARAMETRAGE-FIN\*\//.exec(t);
-        document.getElementById("params").textContent = p ? p[1].trim() : "Paramétrage introuvable dans le fichier publié.";
+        etat.textContent = "Code en ligne : " + CFG.nom + " v" + v[1] + ", publié et accessible.";
+        if (el("params")) {
+          var p = /\/\*PARAMETRAGE-DEBUT\*\/([\s\S]*?)\/\*PARAMETRAGE-FIN\*\//.exec(t);
+          el("params").textContent = p ? p[1].trim() : "Paramétrage introuvable dans le fichier publié.";
+        }
       }).catch(function (e) {
         etat.className = "etat-code ko";
-        etat.textContent = "Code en ligne inaccessible (" + e.message + ") : vérifier que moore-odoo.js est publié à côté de cette page.";
-        document.getElementById("params").textContent = "Fichier publié inaccessible.";
+        etat.textContent = "Code en ligne inaccessible (" + e.message + ") : vérifier que " + CFG.fichier + " est publié à côté de cette page.";
+        if (el("params")) el("params").textContent = "Fichier publié inaccessible.";
       });
     }
 
-    document.getElementById("copy").addEventListener("click", function () {
-      var m = document.getElementById("copymsg");
+    el("copy").addEventListener("click", function () {
+      var m = el("copymsg");
       if (!CHARGEUR) return nonDispo(m, "Favori non disponible : ouvrez la page depuis GitHub Pages.");
       copier(CHARGEUR, m, "Code copié. Collez-le dans le champ URL.", "Copie impossible : utilisez le glisser-déposer.");
     });
-    document.getElementById("copygpo").addEventListener("click", function () {
-      var m = document.getElementById("copygpomsg");
+    if (el("copygpo")) el("copygpo").addEventListener("click", function () {
+      var m = el("copygpomsg");
       if (!CHARGEUR) return nonDispo(m, "Disponible depuis l'adresse GitHub Pages seulement.");
-      copier(document.getElementById("gpo").textContent, m, "Texte copié.", "Copie impossible : sélectionnez le texte ci-dessous.");
+      copier(el("gpo").textContent, m, "Texte copié.", "Copie impossible : sélectionnez le texte ci-dessous.");
     });
 
-    /* Code de secours : le code publié, à coller dans la console d'Odoo */
-    document.getElementById("secours").addEventListener("click", function () {
-      var m = document.getElementById("secoursmsg");
+    /* Code de secours : le code publié, à coller dans la console du site */
+    el("secours").addEventListener("click", function () {
+      var m = el("secoursmsg");
       if (!CODE) return nonDispo(m, "Code publié inaccessible pour l'instant : réessayez dans un moment.");
-      copier(CODE, m, "Code de secours copié : collez-le dans la console d'Odoo.", "Copie impossible : réessayez dans Chrome ou Edge.");
+      copier(CODE, m, "Code de secours copié : collez-le dans la console " + CFG.console + ".", "Copie impossible : réessayez dans Chrome ou Edge.");
     });
   })();
 </script>
+
 </body>
 </html>

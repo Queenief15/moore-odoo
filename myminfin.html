@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installer le favori Moore - MyMinfin</title>
+<style>
+  :root {
+    --navy: #1B2A4A;
+    --navy-2: #2C3E66;
+    --ink: #1F2937;
+    --muted: #5B6475;
+    --line: #D9DEE7;
+    --bg: #F4F6F9;
+    --card: #FFFFFF;
+    --accent: #C8102E;
+    --ok: #1E7D32;
+    --warn-bg: #FFF7E6;
+    --warn: #B45309;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  }
+  header { background: var(--navy); color: #fff; padding: 22px 16px; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 16px; }
+  header .wrap { padding: 0; }
+  header .firm { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; opacity: .75; }
+  header h1 { margin: 4px 0 2px; font-size: 24px; font-weight: 600; }
+  header p { margin: 0; opacity: .85; }
+  header h1 .ver { font-size: 15px; font-weight: 400; opacity: .85; margin-left: 8px; white-space: nowrap; }
+  main.wrap { padding: 24px 16px 40px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+    padding: 20px 22px; margin-bottom: 16px;
+  }
+  .card > h2 { margin: 0 0 8px; font-size: 17px; color: var(--navy); }
+  .card > h3 { margin: 14px 0 6px; font-size: 15px; color: var(--navy-2); }
+  .card > p { margin: 0 0 8px; }
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step > div:last-child { min-width: 0; flex: 1; }
+  li, td, p { overflow-wrap: anywhere; }
+  .num {
+    flex: 0 0 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+  .step h2 { margin: 4px 0 6px; font-size: 17px; color: var(--navy); }
+  .step p { margin: 0 0 8px; }
+  kbd {
+    display: inline-block; padding: 1px 7px; border: 1px solid var(--line); border-bottom-width: 2px;
+    border-radius: 4px; background: #FAFBFC; font: 600 13px/1.5 Consolas, monospace;
+  }
+  code { background: #EEF2F8; padding: 1px 5px; border-radius: 4px; font: 13px Consolas, monospace; }
+
+  /* Choix du navigateur */
+  .nav-choice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .nav-choice .label { font-weight: 600; color: var(--navy); }
+  .nav-choice .reco { flex-basis: 100%; font-size: 13px; color: var(--muted); }
+  .seg { display: inline-flex; border: 1px solid var(--navy); border-radius: 7px; overflow: hidden; }
+  .seg button {
+    font: 600 14px/1 inherit; font-family: inherit; padding: 9px 16px; cursor: pointer;
+    background: #fff; color: var(--navy); border: 0; border-left: 1px solid var(--navy);
+  }
+  .seg button:first-child { border-left: 0; }
+  .seg button[aria-selected="true"] { background: var(--navy); color: #fff; }
+  .detect { font-size: 13px; color: var(--muted); }
+
+  /* Affichage des consignes selon le navigateur choisi */
+  body[data-nav="chrome"] [data-b]:not([data-b~="chrome"]),
+  body[data-nav="edge"] [data-b]:not([data-b~="edge"]),
+  body[data-nav="firefox"] [data-b]:not([data-b~="firefox"]) { display: none; }
+
+  .bookmarklet {
+    display: inline-flex; align-items: center; gap: 8px; margin: 8px 0 6px;
+    padding: 10px 18px; border-radius: 6px; background: var(--navy); color: #fff;
+    font-weight: 600; text-decoration: none; cursor: grab; border: 2px dashed #8FA3C8;
+  }
+  .bookmarklet:active { cursor: grabbing; }
+  .bookmarklet svg { width: 18px; height: 18px; }
+  .hint { font-size: 13px; color: var(--muted); }
+  .alt { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); }
+  .alt h3 { margin: 0 0 6px; font-size: 14px; color: var(--navy-2); }
+  ol.small, ul.small { margin: 6px 0 0; padding-left: 20px; }
+  ol.small li, ul.small li { margin-bottom: 4px; }
+  button.copy {
+    font: 600 14px/1 inherit; font-family: inherit; padding: 9px 14px; border-radius: 6px; cursor: pointer;
+    background: #fff; color: var(--navy); border: 1px solid var(--navy);
+  }
+  button.copy:hover { background: #EEF2F8; }
+  button.copy.primary { background: var(--navy); color: #fff; }
+  .msg { display: inline-block; margin-left: 10px; font-size: 13px; font-weight: 600; }
+  .msg[hidden] { display: none; }
+  .msg.ok { color: var(--ok); }
+  .msg.warn { color: var(--accent); }
+  ul.checks { margin: 6px 0 0; padding-left: 20px; }
+  ul.checks li { margin-bottom: 4px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .two > div { border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; }
+  .two h3 { margin: 0 0 4px; font-size: 15px; color: var(--navy); }
+  .tag { display: inline-block; margin-top: 3px; padding: 0 7px; border-radius: 9px; font-size: 12px; background: #EEF2F8; color: var(--navy-2); }
+  .callout {
+    border-left: 4px solid var(--accent); background: #FDF3F4; padding: 12px 16px; border-radius: 0 6px 6px 0; margin-bottom: 16px;
+  }
+  .callout strong { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--navy); font-weight: 600; background: #F7F9FC; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 0 16px 28px; }
+  @media (max-width: 560px) {
+    .step { gap: 12px; }
+    .num { flex-basis: 28px; height: 28px; font-size: 14px; }
+    header h1 { font-size: 20px; }
+    .seg button { padding: 9px 12px; }
+    .two { grid-template-columns: 1fr; }
+  }
+  .etat-code { display: inline-block; margin-top: 2px; font-size: 13px; font-weight: 600; }
+  .etat-code.ok { color: var(--ok); }
+  .etat-code.ko { color: var(--accent); }
+  .bookmarklet[aria-disabled="true"] { background: #9AA3B5; border-color: #C9CFD6; cursor: not-allowed; }
+  header p.autre { margin-top: 8px; font-size: 13px; }
+  header p.autre a { color: #fff; font-weight: 600; }
+</style>
+</head>
+<body data-nav="chrome">
+<header>
+  <div class="wrap">
+    <div class="firm">Moore Walcourt - outils internes</div>
+    <h1>Favori Moore - MyMinfin <span class="ver">version 1.7.0</span></h1>
+    <p>Un seul favori, à installer une seule fois : il se met ensuite à jour tout seul, chaque clic charge la dernière version publiée. Ensuite, dans MyMinfin (connecté en tant que mandataire, client sélectionné) : un clic sur « Moore - MyMinfin », puis le choix de l’outil : compte-provisions, dettes et remboursements TVA vers Excel, ou téléchargement des documents du client en une fois.</p>
+    <p class="autre">Autre favori du cabinet : <a href="./">Moore - Odoo</a> (concordances, grands livres, amortissements, documents Odoo).</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card nav-choice" aria-label="Choix du navigateur">
+    <span class="label">Votre navigateur :</span>
+    <div class="seg" role="tablist">
+      <button type="button" role="tab" data-choix="chrome" aria-selected="true">Chrome</button>
+      <button type="button" role="tab" data-choix="edge" aria-selected="false">Edge</button>
+      <button type="button" role="tab" data-choix="firefox" aria-selected="false">Firefox</button>
+    </div>
+    <span class="detect" id="detect"></span>
+    <span class="reco">Chrome ou Edge recommandés. Firefox fonctionne aussi.</span>
+  </section>
+
+  <section class="card step">
+    <div class="num">1</div>
+    <div>
+      <h2>Afficher la
+        <span data-b="chrome">barre de favoris</span><span data-b="edge">barre des favoris</span><span data-b="firefox">barre personnelle</span>
+      </h2>
+      <p>Appuyez sur <kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>B</kbd>. La barre apparaît sous la barre d'adresse.</p>
+      <p class="hint" data-b="edge">Pour qu'elle reste toujours visible : Paramètres &gt; Apparence &gt; Afficher la barre des favoris &gt; Toujours.</p>
+      <p class="hint" data-b="firefox">Pour qu'elle reste toujours visible : clic droit sur un espace vide de la barre d'onglets &gt; Barre personnelle &gt; Toujours afficher.</p>
+    </div>
+  </section>
+
+  <section class="card step">
+    <div class="num">2</div>
+    <div>
+      <h2>Glisser ce bouton dans la
+        <span data-b="chrome">barre de favoris</span><span data-b="edge">barre des favoris</span><span data-b="firefox">barre personnelle</span>
+      </h2>
+      <a class="bookmarklet" id="bm" href="#" aria-disabled="true" title="Glissez-moi dans la barre de favoris">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>
+        Moore - MyMinfin
+      </a>
+      <p class="hint">Maintenez le clic sur le bouton, déplacez-le jusqu'à la barre, puis relâchez. <span id="clickmsg" class="msg warn" hidden>Il faut le glisser, pas cliquer dessus.</span></p>
+      <p class="hint" id="bminfo">Préparation du favori…</p>
+      <p><span id="etat" class="etat-code">Vérification du code en ligne…</span></p>
+      <p class="hint"><strong>Déjà un favori « Moore - MyMinfin » dans la barre (version 1.6 ou plus ancienne) ?</strong> Supprimez-le d'abord (clic droit &gt; Supprimer), puis glissez celui-ci. C'est la dernière fois : les versions suivantes arrivent toutes seules.</p>
+
+      <div class="alt">
+        <h3>Si le glisser-déposer ne fonctionne pas</h3>
+        <button class="copy" id="copy" type="button">Copier le code du favori</button><span id="copymsg" class="msg" aria-live="polite"></span>
+        <ol class="small" data-b="chrome">
+          <li>Clic droit sur la barre de favoris &gt; <em>Ajouter une page…</em></li>
+          <li>Nom : <strong>Moore - MyMinfin</strong></li>
+          <li>URL : effacer le contenu puis coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>) &gt; <em>Enregistrer</em></li>
+        </ol>
+        <ol class="small" data-b="edge">
+          <li>Sur cette page, appuyez sur <kbd>Ctrl</kbd> + <kbd>D</kbd>, choisissez le dossier <em>Barre des favoris</em> &gt; <em>Terminé</em>.</li>
+          <li>Clic droit sur le favori qui vient d'apparaître dans la barre &gt; <em>Modifier</em>.</li>
+          <li>Nom : <strong>Moore - MyMinfin</strong> - URL : effacer le contenu puis coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>) &gt; <em>Enregistrer</em></li>
+        </ol>
+        <ol class="small" data-b="firefox">
+          <li>Clic droit sur la barre personnelle &gt; <em>Ajouter un marque-page…</em></li>
+          <li>Nom : <strong>Moore - MyMinfin</strong></li>
+          <li>URL : coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>) &gt; <em>Enregistrer</em></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="card step">
+    <div class="num">3</div>
+    <div>
+      <h2>Utilisation</h2>
+      <ol class="small">
+        <li>Se connecter à <strong>MyMinfin</strong> en tant que mandataire, puis choisir le client (<em>Sélectionner un client</em>) : son nom et son n° d'entreprise s'affichent en haut à droite.</li>
+        <li>Cliquer sur <span data-b="chrome edge">le favori</span><span data-b="firefox">le marque-page</span> <strong>Moore - MyMinfin</strong>. Sur <em>Mes paiements</em> ou <em>Mes documents</em>, l'outil s'ouvre directement. Ailleurs dans MyMinfin, une fenêtre propose le choix et ouvre la bonne page.</li>
+        <li><strong>Compte-provisions, dettes et remboursements TVA</strong> (<em>Mes paiements</em>, blocs ouverts ou fermés : le favori ouvre ceux dont il a besoin puis les referme) : un panneau s'ouvre en haut à droite avec le montant disponible, les dettes TVA à payer (et la plus ancienne échéance), les remboursements TVA à venir et ceux dont l'échéance est passée, et les paiements en attente. Cliquer sur <strong>Télécharger l’Excel</strong> (classeur aux couleurs de Moore, comme les concordances) ou sur <strong>Enregistrer en PDF</strong> (page A4 comme la fiche TVA : choisir l'imprimante « Enregistrer au format PDF », puis le dossier du client). Ou <strong>Copier le détail</strong>, <strong>Copier la ligne récap</strong> (une ligne par client, pour un tableau de suivi) ou <strong>Copier en-tête + ligne récap</strong> (la première fois), puis coller dans Excel (<kbd>Ctrl</kbd> + <kbd>V</kbd>).</li>
+        <li><strong>Documents</strong> (<em>Mes documents</em>) : choisir d'abord l'onglet (<em>Mes Documents</em>, <em>Autres documents mis à disposition</em>…) et, si besoin, filtrer avec les filtres MyMinfin (type, date de publication). Dans le panneau, filtrer au besoin par <strong>année</strong> ou par <strong>période</strong>, puis cliquer sur <strong>Télécharger en ZIP</strong> : un seul fichier ZIP à la fin, avec tous les documents et leur liste. <strong>Fichiers séparés</strong> donne un fichier par document. Les cases permettent d'en retirer.</li>
+        <li>En fichiers séparés, au deuxième fichier, <span data-b="chrome">Chrome</span><span data-b="edge">Edge</span><span data-b="firefox">Firefox</span> demande s'il peut télécharger plusieurs fichiers : <strong>Autoriser</strong>.<span data-b="chrome edge"> S'il demande où enregistrer chaque fichier : Paramètres &gt; Téléchargements &gt; désactiver « Demander dans quel dossier enregistrer chaque fichier ».</span><span data-b="firefox"> Selon vos réglages, Firefox peut demander où enregistrer chaque fichier.</span></li>
+      </ol>
+      <p class="hint">Excel : <strong>&lt;AAAA-MM-JJ&gt; - Compte-provisions TVA - &lt;CLIENT&gt;.xlsx</strong> ; PDF : même nom proposé, en <strong>.pdf</strong>. ZIP : <strong>&lt;CLIENT&gt; - documents MyMinfin - &lt;AAAA-MM-JJ&gt;.zip</strong> (avec l'année ou l'onglet si filtrés), qui contient <strong>&lt;AAAA-MM-JJ&gt; - &lt;Nom du document&gt;.pdf</strong> et <strong>_Liste des documents.csv</strong>. Fichiers séparés : <strong>&lt;CLIENT&gt; - &lt;AAAA-MM-JJ&gt; - &lt;Nom du document&gt;.pdf</strong>. Tout arrive dans <strong>Téléchargements</strong>. <strong>Copier le journal</strong> donne la liste à coller dans Excel.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Ce que fait le favori</h2>
+    <div class="two">
+      <div>
+        <h3>Compte-provisions, dettes et remboursements TVA</h3>
+        <ul class="small">
+          <li>Ouvre un instant les blocs fermés de <em>Mes paiements</em> (dettes, provisions TVA, paiements en ligne), attend leur chargement, puis les referme.</li>
+          <li><strong>Montant disponible</strong> sur le compte-provisions TVA et <strong>détail des provisions</strong> (type, référence, date valeur, montant).</li>
+          <li><strong>Dettes actuelles et remboursements</strong> : référence, type, <strong>nature</strong> (dette ou remboursement), échéance, montant initial, solde. MyMinfin ne les distingue pas à l'écran : le favori utilise un instant le filtre « Montant initial » du tableau, puis le remet sur « Tout ».</li>
+          <li>Totaux : dettes TVA à payer (plus ancienne échéance), remboursements TVA à venir, remboursements dont l'échéance est passée (à rapprocher de la banque).</li>
+          <li><strong>Paiements en attente</strong> et date de mise à jour des données SPF.</li>
+          <li>Contrôles : filtre actif sur le tableau, nombre de lignes annoncé par MyMinfin, détail des provisions = montant disponible, dettes sans solde affiché, dettes et remboursements non distingués.</li>
+          <li><strong>Excel</strong> : logo et en-tête Moore, fiche du dossier (profession, relation client, senior à compléter), chiffres clés (disponible, dettes TVA, remboursements à venir, position nette), tableaux avec totaux en formules et statut de chaque ligne (dette échue, remboursement à venir…), contrôle « Concordant / Écart à justifier », remarques internes, onglet Extraction ; prêt à imprimer sur une page.</li>
+          <li><strong>PDF</strong> : en-tête Moore, état de la lecture, chiffres clés, compte-provisions, synthèse, dettes et remboursements avec leur statut, paiements en attente, points d'attention ; une page A4 en général, sans l'adresse ni la date ajoutées par le navigateur.</li>
+          <li>Copies : montants et dates au format Excel belge (1697,63 ; 31/07/2026).</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Documents</h3>
+        <ul class="small">
+          <li>Liste des documents de l'onglet affiché, avec cases à cocher (tout cocher, tout décocher, actualiser).</li>
+          <li><strong>Mode rapide</strong> : le favori ouvre un menu <strong>⋮</strong> pour reprendre les en-têtes de MyMinfin, relit la liste des documents de MyMinfin, puis demande les fichiers directement, 3 à la fois. Les pièces jointes d'un document sont ajoutées à côté de lui.</li>
+          <li>À défaut (document non retrouvé dans la liste, refus de MyMinfin) : ouverture du menu <strong>⋮</strong> et clic sur <strong>Télécharger</strong>, un document à la fois, avec une pause entre deux.</li>
+          <li><strong>ZIP</strong> : un seul téléchargement à la fin, documents nommés <strong>date - nom du document</strong> (date du document comme date du fichier), plus la liste des documents (CSV). En cas d'arrêt, le ZIP contient les documents déjà récupérés.</li>
+          <li>Ou fichiers séparés, renommés <strong>CLIENT - date - nom du document</strong> ; doublons numérotés (2), (3)…</li>
+          <li>Filtres par année et par période de publication.</li>
+          <li>Statut par document (✔ / ✖, survoler pour le détail), journal copiable, bouton <strong>Arrêter</strong>. La liste se met à jour seule quand on change d'onglet.</li>
+          <li><strong>Copier le diagnostic</strong> (lien du panneau, toujours disponible) : libellés des menus, adresses appelées par MyMinfin et forme de leurs réponses (noms de champs et types uniquement, aucune valeur ni donnée client).</li>
+        </ul>
+      </div>
+    </div>
+    <ul class="checks" style="margin-top:12px">
+      <li>Compte-provisions : <strong>lecture seule</strong>. Les blocs fermés sont ouverts puis refermés ; seul le filtre « Montant initial » du tableau est utilisé un instant, puis remis sur « Tout ».</li>
+      <li>Documents : les mêmes clics qu'à la main. Le favori ne clique jamais sur une action du type supprimer, archiver, signaler ou répondre.</li>
+      <li>Rien n'est envoyé ailleurs : les copies vont dans le presse-papiers, les fichiers (Excel, ZIP, documents) dans Téléchargements.</li>
+      <li><strong>Mise à jour automatique</strong> : le favori ne contient plus le code. À chaque clic, il charge la dernière version publiée (fichier <code>moore-myminfin.js</code>, à côté de cette page). Aucune donnée ne part vers GitHub : le code est seulement téléchargé, puis il s'exécute dans votre navigateur (GitHub voit uniquement que la demande vient du site MyMinfin).</li>
+      <li>Le favori lit la page affichée (le SPF ne propose pas d'accès direct pour le compte-provisions) : si MyMinfin change sa présentation, le favori le signale et une mise à jour sera nécessaire.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Messages possibles</h2>
+    <table>
+      <tr><th>Message</th><th>Que faire</th></tr>
+      <tr><td>Ouvrez MyMinfin (connecté, client sélectionné) avant de cliquer sur le favori</td><td>Le favori a été cliqué hors de MyMinfin. Ouvrez MyMinfin, connectez-vous, sélectionnez le client, puis recliquez.</td></tr>
+      <tr><td>Aucun client sélectionné<br><span class="tag">Fenêtre</span> <span class="tag">Panneaux</span></td><td>Les données affichées sont celles du profil connecté. Choisir le client (<em>Sélectionner un client</em>), puis recliquer.</td></tr>
+      <tr><td>Bloc « … » : contenu pas chargé après 20 s<br><span class="tag">Compte-provisions</span></td><td>MyMinfin a mis trop de temps à charger le bloc : recliquer sur le favori. Les montants de ce bloc sont marqués « non lu » dans l'Excel.</td></tr>
+      <tr><td>Bloc « … » : il ne s'est pas ouvert<br><span class="tag">Compte-provisions</span></td><td>Ouvrir le bloc à la main, puis recliquer. Si cela se répète : <em>Copier le diagnostic</em> (lien en bas du panneau) et l'envoyer à Queenie.</td></tr>
+      <tr><td>Aucun montant disponible affiché dans « Gérer mes provisions TVA »<br><span class="tag">Compte-provisions</span></td><td>Le bloc s'ouvre mais n'affiche pas de montant : client sans compte-provisions TVA, à vérifier dans le bloc.</td></tr>
+      <tr><td>Un filtre est actif sur le tableau des dettes<br><span class="tag">Compte-provisions</span></td><td>Remettre le type sur « Tout », vider les dates du tableau <em>Consulter mes dettes actuelles et remboursements</em>, puis recliquer.</td></tr>
+      <tr><td>Colonne « Solde » vide sur … dette(s) TVA<br><span class="tag">Compte-provisions</span></td><td>MyMinfin n'affiche pas de solde pour ces dettes : le montant initial est repris. Vérifier une ligne avec le bouton <em>Détail</em> avant d'utiliser le total.</td></tr>
+      <tr><td>Dettes et remboursements non distingués<br><span class="tag">Compte-provisions</span></td><td>Le filtre « Montant initial » n'a pas répondu : toutes les lignes TVA sont comptées comme dettes. Les trier à la main avec ce filtre (Remboursements / Dettes) et prévenir Queenie.</td></tr>
+      <tr><td>Remboursements TVA – échéance passée<br><span class="tag">Compte-provisions</span></td><td>Pas une erreur : MyMinfin garde un temps les remboursements déjà exécutés. Vérifier qu'ils sont bien arrivés en banque (compte courant TVA 411200).</td></tr>
+      <tr><td>Dettes échues non soldées : TVA … ; hors TVA …<br><span class="tag">Compte-provisions</span></td><td>Dettes dont l'échéance est passée et qui restent ouvertes dans MyMinfin (des intérêts de retard courent) : à régulariser avec le client, ou à vérifier si un paiement attend son affectation.</td></tr>
+      <tr><td>Provisions disponibles alors que des dettes TVA sont ouvertes · Paiement du … = montant initial de la dette TVA …<br><span class="tag">Compte-provisions</span></td><td>Un paiement est resté sur le compte-provisions au lieu d'être affecté à sa dette (MyMinfin signale des retards d'affectation). Vérifier dans MyMinfin et, si la dette reste ouverte, demander l'affectation au SPF (les intérêts liés à l'incident doivent être adaptés).</td></tr>
+      <tr><td>Le détail des provisions ne correspond pas au montant disponible<br><span class="tag">Compte-provisions</span></td><td>Vérifier dans MyMinfin (affectation en cours côté SPF). Prévenir Queenie si l'écart persiste.</td></tr>
+      <tr><td>Page non reconnue · Rien n'a pu être lu<br><span class="tag">Compte-provisions</span></td><td>Cliquer sur <em>Copier le diagnostic</em> (aucun montant dedans) et l'envoyer à Queenie.</td></tr>
+      <tr><td>✖ pas d'action de téléchargement dans le menu<br><span class="tag">Documents</span></td><td>Le menu ⋮ de ce document ne propose pas de téléchargement. Cliquer sur <em>Copier le diagnostic</em> (sans données personnelles) et l'envoyer à Queenie.</td></tr>
+      <tr><td>✖ aucun téléchargement détecté<br><span class="tag">Documents</span></td><td>Regarder quand même dans Téléchargements. Si le fichier n'y est pas : <em>Copier le diagnostic</em> et l'envoyer à Queenie.</td></tr>
+      <tr><td>✖ liste modifiée : clique « Actualiser la liste »<br><span class="tag">Documents</span></td><td>La liste se met à jour seule quand l'onglet ou les filtres MyMinfin changent ; si un document reste en ✖, cliquer sur <em>Actualiser la liste</em> et relancer.</td></tr>
+      <tr><td>✖ MyMinfin ouvre une autre application (…)<br><span class="tag">Documents</span></td><td>Ce document ne s'ouvre pas dans MyMinfin mais dans une autre application du SPF : le favori ne peut pas le récupérer. Le télécharger à la main depuis cette application.</td></tr>
+      <tr><td>✖ MyMinfin a ouvert une autre page (…)<br><span class="tag">Documents</span></td><td>Le favori s'arrête pour ne pas se perdre. Revenir à <em>Mes documents</em>, puis <em>Copier le diagnostic</em> et l'envoyer à Queenie.</td></tr>
+      <tr><td>Les fichiers n'arrivent plus après le premier (fichiers séparés)<br><span class="tag">Documents</span></td><td>Le navigateur bloque les téléchargements multiples : cliquer sur l'icône de téléchargement bloqué dans la barre d'adresse &gt; toujours autoriser minfin.fgov.be, puis relancer pour les documents en ✖.</td></tr>
+      <tr><td>Liste paginée : seule la page affichée est prise en compte<br><span class="tag">Documents</span></td><td>Traiter la liste page par page, ou réduire la liste avec les filtres MyMinfin.</td></tr>
+      <tr><td>Mode rapide : refus de MyMinfin (repris par le menu)<br><span class="tag">Documents</span></td><td>Rien à faire : le document a été récupéré par le menu ⋮. Si cela arrive pour tous les documents, envoyer le diagnostic à Queenie.</td></tr>
+      <tr><td>Session MyMinfin expirée<br><span class="tag">Documents</span></td><td>Le favori s'arrête. Se reconnecter à MyMinfin, resélectionner le client, puis relancer pour les documents restants.</td></tr>
+      <tr><td>Moore - MyMinfin : code en ligne inaccessible<br><span class="tag">Favori</span></td><td>Pas de connexion internet, ou MyMinfin bloque le chargement du code. Réessayer ; si le message reste, utiliser le <strong>code de secours</strong> (ci-dessous) et prévenir Queenie.</td></tr>
+      <tr><td>Moore - MyMinfin : code en ligne introuvable (HTTP 404)<br><span class="tag">Favori</span></td><td>Le fichier publié a été déplacé ou renommé sur GitHub. Prévenir Queenie.</td></tr>
+      <tr><td>Rien ne se passe au clic</td><td>Vérifier que le favori a bien été glissé depuis cette page (pas copié depuis un ancien fichier). Sinon, MyMinfin peut bloquer les favoris : utiliser le <strong>code de secours</strong> (ci-dessous), qui fait exactement la même chose. Prévenir Queenie.</td></tr>
+    </table>
+  </section>
+
+  <section class="card" id="secours-carte">
+    <h2>Si rien ne se passe au clic : code de secours</h2>
+    <p>Le code de secours est le code publié (le même que celui que charge le favori), à coller dans la console du navigateur.</p>
+    <p><button class="copy primary" id="secours" type="button">Copier le code de secours</button><span id="secoursmsg" class="msg" aria-live="polite"></span></p>
+    <ol class="small">
+      <li>Ouvrir MyMinfin et sélectionner le client.</li>
+      <li><span data-b="chrome edge"><kbd>F12</kbd> &gt; onglet <strong>Console</strong></span><span data-b="firefox"><kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>K</kbd> (console web)</span>.</li>
+      <li>Coller (<kbd>Ctrl</kbd> + <kbd>V</kbd>), puis <kbd>Entrée</kbd>. La première fois, le navigateur demande de taper <span data-b="chrome edge"><strong>allow pasting</strong></span><span data-b="firefox">le texte qu'il indique (<strong>autoriser le collage</strong>)</span>, puis de coller à nouveau.</li>
+      <li>Prévenir Queenie.</li>
+    </ol>
+  </section>
+
+  <div class="callout">
+    <strong>Mise à jour :</strong> à partir de la version 1.7, le favori se met à jour tout seul. Il suffit de l'installer une dernière fois : supprimer l'ancien « Moore - MyMinfin » (clic droit &gt; Supprimer), puis glisser le nouveau (étape 2). Vérification : la fenêtre de choix du favori affiche « Moore - MyMinfin v1.7.0 » (ou plus récent).
+  </div>
+</main>
+
+<footer>Favori Moore - MyMinfin - version 1.7.0 - 26/10/2026 - mise à jour automatique - Chrome, Edge, Firefox</footer>
+<script>
+  (function () {
+    /* Réglages de la page : fichier publié chargé par le favori, nom du favori, favoris de la stratégie de groupe */
+    var CFG = {"fichier": "moore-myminfin.js", "nom": "Moore - MyMinfin", "console": "de MyMinfin", "gpo": []};
+
+    /* Choix du navigateur : détecté automatiquement, modifiable par l'utilisateur (ne change que les consignes) */
+    var ua = navigator.userAgent;
+    var detecte = /Firefox\//.test(ua) ? "firefox" : /Edg\//.test(ua) ? "edge" : /Chrome\//.test(ua) ? "chrome" : null;
+    var noms = { chrome: "Chrome", edge: "Edge", firefox: "Firefox" };
+    var boutons = document.querySelectorAll(".seg button");
+    function choisir(nav) {
+      document.body.setAttribute("data-nav", nav);
+      for (var i = 0; i < boutons.length; i++) {
+        boutons[i].setAttribute("aria-selected", boutons[i].getAttribute("data-choix") === nav ? "true" : "false");
+      }
+    }
+    for (var i = 0; i < boutons.length; i++) {
+      boutons[i].addEventListener("click", function () { choisir(this.getAttribute("data-choix")); });
+    }
+    if (detecte) {
+      choisir(detecte);
+      document.getElementById("detect").textContent = "(" + noms[detecte] + " détecté)";
+    }
+
+    /* Copie dans le presse-papiers (repli sur une zone de texte si l'accès direct est refusé) */
+    function copier(texte, m, reussite, echec) {
+      function ok() { m.className = "msg ok"; m.textContent = reussite; }
+      function secours() {
+        var t = document.createElement("textarea");
+        t.value = texte; t.setAttribute("readonly", "");
+        t.style.position = "fixed"; t.style.left = "-9999px";
+        document.body.appendChild(t); t.select();
+        var reussi = false;
+        try { reussi = document.execCommand("copy"); } catch (err) { reussi = false; }
+        document.body.removeChild(t);
+        if (reussi) { ok(); } else { m.className = "msg warn"; m.textContent = echec; }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texte).then(ok, secours);
+      } else {
+        secours();
+      }
+    }
+    function nonDispo(m, texte) { m.className = "msg warn"; m.textContent = texte; }
+    function el(id) { return document.getElementById(id); }
+
+    /* Le favori : un petit chargeur fixe qui télécharge, à chaque clic, le code publié à côté de cette page */
+    var lien = el("bm"), info = el("bminfo"), etat = el("etat");
+    function adresseDe(fichier) { return new URL(fichier, location.href).href.split("#")[0].split("?")[0]; }
+    function sure(u) { return /^https?:\/\/[^'"\\%\s<>`]+$/.test(u); }
+    var adresse = adresseDe(CFG.fichier);
+    var publiee = location.protocol === "https:" || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    var CHARGEUR = null, CODE = null;
+
+    function chargeur(u, nom) {
+      return "javascript:(async()=>{try{const r=await fetch('" + u + "?v='+Date.now(),{cache:'no-store',referrerPolicy:'no-referrer'})" +
+        ".catch(e=>{throw new Error('code en ligne inaccessible ('+e.message+')')});" +
+        "if(!r.ok)throw new Error('code en ligne introuvable (HTTP '+r.status+')');" +
+        "const t=await r.text();" +
+        "try{(0,eval)(t)}catch(e){if(!(e instanceof EvalError))throw e;const s=document.createElement('script');s.textContent=t;document.head.append(s);s.remove()}" +
+        "}catch(e){alert('" + nom + " : '+e.message)}})()";
+    }
+
+    lien.addEventListener("click", function (e) {
+      e.preventDefault();
+      var m = el("clickmsg");
+      m.hidden = false;
+      setTimeout(function () { m.hidden = true; }, 4000);
+    });
+
+    if (!publiee || !sure(adresse)) {
+      info.textContent = "Cette page doit être ouverte depuis son adresse GitHub Pages (https://…github.io/…) : ouverte depuis un fichier, elle ne peut pas préparer le favori.";
+      etat.className = "etat-code ko";
+      etat.textContent = "Favori non disponible.";
+    } else {
+      CHARGEUR = chargeur(adresse, CFG.nom);
+      lien.setAttribute("href", CHARGEUR);
+      lien.removeAttribute("aria-disabled");
+      info.textContent = "Favori prêt. À chaque clic, il charge la dernière version publiée : " + adresse;
+
+      /* Texte de la stratégie de groupe (page qui en a une) : tous les favoris Moore publiés ici */
+      if (el("gpo")) {
+        var liste = [{ toplevel_name: "Moore" }];
+        for (var g = 0; g < CFG.gpo.length; g++) {
+          var a = adresseDe(CFG.gpo[g].fichier);
+          if (sure(a)) liste.push({ name: CFG.gpo[g].nom, url: chargeur(a, CFG.gpo[g].nom) });
+        }
+        el("gpo").textContent = JSON.stringify(liste);
+      }
+
+      /* Contrôle : le code publié est-il accessible, et quelle version ? */
+      fetch(adresse + "?v=" + Date.now(), { cache: "no-store" }).then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.text();
+      }).then(function (t) {
+        var v = new RegExp(CFG.nom + " v(\\d+\\.\\d+\\.\\d+)").exec(t.slice(0, 400));
+        if (!v) throw new Error("fichier publié non reconnu");
+        CODE = t;
+        etat.className = "etat-code ok";
+        etat.textContent = "Code en ligne : " + CFG.nom + " v" + v[1] + ", publié et accessible.";
+        if (el("params")) {
+          var p = /\/\*PARAMETRAGE-DEBUT\*\/([\s\S]*?)\/\*PARAMETRAGE-FIN\*\//.exec(t);
+          el("params").textContent = p ? p[1].trim() : "Paramétrage introuvable dans le fichier publié.";
+        }
+      }).catch(function (e) {
+        etat.className = "etat-code ko";
+        etat.textContent = "Code en ligne inaccessible (" + e.message + ") : vérifier que " + CFG.fichier + " est publié à côté de cette page.";
+        if (el("params")) el("params").textContent = "Fichier publié inaccessible.";
+      });
+    }
+
+    el("copy").addEventListener("click", function () {
+      var m = el("copymsg");
+      if (!CHARGEUR) return nonDispo(m, "Favori non disponible : ouvrez la page depuis GitHub Pages.");
+      copier(CHARGEUR, m, "Code copié. Collez-le dans le champ URL.", "Copie impossible : utilisez le glisser-déposer.");
+    });
+    if (el("copygpo")) el("copygpo").addEventListener("click", function () {
+      var m = el("copygpomsg");
+      if (!CHARGEUR) return nonDispo(m, "Disponible depuis l'adresse GitHub Pages seulement.");
+      copier(el("gpo").textContent, m, "Texte copié.", "Copie impossible : sélectionnez le texte ci-dessous.");
+    });
+
+    /* Code de secours : le code publié, à coller dans la console du site */
+    el("secours").addEventListener("click", function () {
+      var m = el("secoursmsg");
+      if (!CODE) return nonDispo(m, "Code publié inaccessible pour l'instant : réessayez dans un moment.");
+      copier(CODE, m, "Code de secours copié : collez-le dans la console " + CFG.console + ".", "Copie impossible : réessayez dans Chrome ou Edge.");
+    });
+  })();
+</script>
+
+</body>
+</html>
