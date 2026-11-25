@@ -1,13 +1,16 @@
-/* Moore - MyMinfin v1.7.1 — Moore Walcourt — outils MyMinfin : compte-provisions TVA et documents.
+/* Moore - MyMinfin v1.7.3 — Moore Walcourt — outils MyMinfin : compte-provisions TVA et documents.
    Code du favori, chargé à chaque clic. Mise à jour : remplacer ce fichier dans le dépôt GitHub ; tous les favoris l’utilisent au clic suivant.
    Secours : dans MyMinfin, client sélectionné, F12 > Console, coller tout ce fichier, Entrée (la première fois : taper « allow pasting »). */
 (async () => {
   'use strict';
-  const VERSION = '1.7.1';     // 1.7.1 (Moore - Outils 1.24.0) : logo « MOORE / Auren » des classeurs
+  const VERSION = '1.7.3';     // 1.7.1 (Moore - Outils 1.24.0) : logo « MOORE / Auren » des classeurs ;
+                              // 1.7.2 (Moore - Outils 1.34.2) : crédit TVA à la fois provision et remboursement compté une fois
+                              // 1.7.3 (Moore - Outils 1.34.6) : page non reconnue, rien de lu : le diagnostic s'envoie à Queenie,
+                              //   comme le dit le mode d'emploi en ligne (aucun autre changement)
 
   async function outilCompteProvisions() {
   'use strict';
-  const VERSION = 'v1.4.1';
+  const VERSION = 'v1.4.2';
   const HOST_ID = 'moore-mmf-compte-provisions';
 
   // ---------------------------------------------------------------- outils
@@ -15,7 +18,7 @@
   const txt = el => (el ? clean(el.innerText || el.textContent) : '');
   const simple = s => clean(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
-  // « 1.697,63 € » -> 1697.63 ; « - » ou vide -> null
+  // « 1.234,56 € » -> 1234.56 ; « - » ou vide -> null
   const montant = s => {
     const m = String(s ?? '').replace(/[\s  ]/g, '').match(/[-−]?\d[\d.]*(?:,\d+)?/);
     return m ? parseFloat(m[0].replace('−', '-').replace(/\./g, '').replace(',', '.')) : null;
@@ -26,7 +29,7 @@
     const [e, d] = Math.abs(n).toFixed(2).split('.');
     return (n < 0 ? '-' : '') + e.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + d + ' €';
   };
-  // Texte que Excel ne doit pas transformer (formule, zéro de tête comme 0430.658.521, nombre trop long)
+  // Texte que Excel ne doit pas transformer (formule, zéro de tête comme 0123.456.789, nombre trop long)
   const xlTexte = s => (/^[=+\-@]/.test(s) || /^\d{9,}$/.test(s) || /^0\d/.test(s) ? "'" + s : s);
 
   // « 31 juillet 2026 » / « 1er août 2026 » / « 08/09/2026 » -> « 31/07/2026 »
@@ -291,8 +294,30 @@
   // Nature inconnue (filtre inutilisable) : traitée prudemment comme une dette, avec un point d'attention
   const dettesTVA = lignesTVA.filter(d => d.nature !== 'remboursement');
   const rembTVA = lignesTVA.filter(d => d.nature === 'remboursement');
-  const rembAVenir = rembTVA.filter(d => triDate(d.echeance) >= aujourdhui);
-  const rembPasses = rembTVA.filter(d => triDate(d.echeance) < aujourdhui);
+  // v1.4.2 : crédit TVA déjà sur le compte-provisions. MyMinfin peut montrer un même crédit TVA à la fois parmi les
+  // provisions (compris dans le montant disponible) et parmi les remboursements TVA (exemple signalé le 14/11/2026 : deux
+  // crédits comptés deux fois dans la position nette). Un remboursement TVA du même montant (au cent) qu'une provision
+  // est marqué « en provision » : compté une seule fois, dans le disponible, et signalé dans les points d'attention.
+  // Chaque provision ne sert qu'une fois ; remboursements à venir d'abord, puis ceux à l'échéance passée.
+  const rembEnProvision = [];
+  if (dispo != null && provisions.length) {
+    const libres = provisions.filter(pv => pv.montant != null && pv.montant > 0.005);
+    const ordre = rembTVA.filter(d => triDate(d.echeance) >= aujourdhui).concat(rembTVA.filter(d => triDate(d.echeance) < aujourdhui));
+    ordre.forEach(d => {
+      const m = Math.abs(d.reste || 0);
+      const i = m > 0.005 ? libres.findIndex(pv => Math.abs(pv.montant - m) < 0.005) : -1;
+      if (i < 0) return;
+      d.enProvision = libres[i];
+      rembEnProvision.push(d);
+      libres.splice(i, 1);
+    });
+  }
+  const rembAVenir = rembTVA.filter(d => !d.enProvision && triDate(d.echeance) >= aujourdhui);
+  const rembPasses = rembTVA.filter(d => !d.enProvision && triDate(d.echeance) < aujourdhui);
+  rembEnProvision.forEach(d => avert.push(`Remboursement TVA de ${affiche(Math.abs(d.reste))} ` +
+    `(${d.echeance && triDate(d.echeance) !== '99999999' ? 'échéance du ' + d.echeance : 'sans échéance'}, réf. ${d.reference}) = provision ` +
+    `${d.enProvision.type || ''}${d.enProvision.dateValeur ? ' du ' + d.enProvision.dateValeur : ''} du compte-provisions : déjà compris dans le ` +
+    'disponible, compté une seule fois dans la position nette (pas dans les remboursements TVA). À vérifier dans MyMinfin.'));
   const natureInconnue = lignesTVA.some(d => !d.nature);
   if (natureInconnue) avert.push('Dettes et remboursements non distingués : toutes les lignes TVA sont comptées comme dettes. Vérifier avec le filtre « Montant initial » du tableau.');
   const totalTVA = somme(dettesTVA);
@@ -303,7 +328,7 @@
   const autres = dettes.filter(d => !d.tva);
   const autresDettes = autres.filter(d => d.nature !== 'remboursement');
   const autresRemb = autres.filter(d => d.nature === 'remboursement');
-  const rembSansDate = rembTVA.filter(d => triDate(d.echeance) === '99999999');
+  const rembSansDate = rembAVenir.filter(d => triDate(d.echeance) === '99999999');
   // Dettes échues (échéance passée, nature confirmée par le filtre) : à régulariser
   const echues = l => l.filter(d => d.nature === 'dette' && triDate(d.echeance) !== '99999999' && triDate(d.echeance) < aujourdhui);
   const tvaEchues = echues(dettesTVA), autresEchues = echues(autresDettes);
@@ -371,12 +396,13 @@
   L.push('');
   L.push('Dettes actuelles et remboursements');
   L.push(['Référence', 'Type', 'Nature', "Date d'échéance", 'Montant initial', 'Solde', 'Montant retenu', 'TVA ?'].join('\t'));
-  dettes.forEach(d => L.push([xlTexte(d.reference), xlTexte(d.type), NATURE[d.nature], d.echeance, xlNombre(d.initial),
+  dettes.forEach(d => L.push([xlTexte(d.reference), xlTexte(d.type), NATURE[d.nature] + (d.enProvision ? ' (en provision)' : ''), d.echeance, xlNombre(d.initial),
                               xlNombre(d.solde), xlNombre(d.reste), d.tva ? 'oui' : 'non'].join('\t')));
   if (!dettes.length) L.push(dettesLues ? (infoDettes || '(aucune ligne)') : '(tableau non lu)');
   L.push(`Total dettes TVA à payer${natureInconnue ? ' (nature non déterminée)' : ''}\t${nl(totalTVA)}`);
   L.push(`Total remboursements TVA à venir\t${nl(somme(rembAVenir))}`);
   L.push(`Total remboursements TVA – échéance passée\t${nl(somme(rembPasses))}`);
+  if (rembEnProvision.length) L.push(`Remboursements TVA déjà sur le compte-provisions (comptés dans le disponible)\t${nl(somme(rembEnProvision))}`);
   if (autresDettes.length) L.push(`Total autres dettes (hors TVA)\t${nl(somme(autresDettes))}`);
   if (autresRemb.length) L.push(`Total autres remboursements (hors TVA)\t${nl(somme(autresRemb))}`);
   L.push('');
@@ -407,7 +433,7 @@
     titres: [...document.querySelectorAll('h2')].map(txt).slice(0, 15),
   }, null, 2);
 
-  window.__mmf = { detail, ligne, entete, diag, donnees: { client, bce, dispo, provisions, dettes, dettesLues, totalTVA, rembAVenir: somme(rembAVenir), rembPasses: somme(rembPasses), majSPF, avert, blocs: etatBlocs } };
+  window.__mmf = { detail, ligne, entete, diag, donnees: { client, bce, dispo, provisions, dettes, dettesLues, totalTVA, rembAVenir: somme(rembAVenir), rembPasses: somme(rembPasses), rembEnProvision: somme(rembEnProvision), majSPF, avert, blocs: etatBlocs } };
 
   // ------------------------------------------------------- Excel du détail
   const isoDe = fr => { const m = String(fr || '').match(/(\d{2})\/(\d{2})\/(\d{4})/); return m ? `${m[3]}-${m[2]}-${m[1]}` : ''; };
@@ -490,11 +516,12 @@
     const typeV = Object.assign({}, st.td, { v: 'center', wrap: true });
     const refV = Object.assign({}, st.td, { v: 'center', shrink: true });   // longues références (VALUEADDEDTAXMERGED)
     dettes.forEach(d => {
-      cel(r, 1, d.reference, refV); cel(r, 2, d.type, typeV); cel(r, 3, NATURE[d.nature] + (d.tva ? ' TVA' : ''), tdcV);
+      cel(r, 1, d.reference, refV); cel(r, 2, d.type, typeV);
+      cel(r, 3, NATURE[d.nature] + (d.tva ? ' TVA' : '') + (d.enProvision ? ' (en provision)' : ''), tdcV);
       cel(r, 4, date(d.echeance), dateV); cel(r, 5, d.initial, numV); cel(r, 6, d.solde, numV);
       F.set(r, 7, { f: `IF(F${r}="",E${r},F${r})` }, numV);
-      F.set(r, 8, { f: `IF(LEFT(C${r},5)="Dette",IF(D${r}="","Dette sans échéance",IF(D${r}<${JOUR},"Dette échue","Dette à échoir")),` +
-        `IF(LEFT(C${r},5)="Rembo",IF(D${r}="","Remb. sans date",IF(D${r}<${JOUR},"Remb. échu","Remb. à venir")),"À vérifier"))` }, tdcV);
+      F.set(r, 8, { f: `IF(ISNUMBER(SEARCH("en provision",C${r})),"Déjà en provision",IF(LEFT(C${r},5)="Dette",IF(D${r}="","Dette sans échéance",IF(D${r}<${JOUR},"Dette échue","Dette à échoir")),` +
+        `IF(LEFT(C${r},5)="Rembo",IF(D${r}="","Remb. sans date",IF(D${r}<${JOUR},"Remb. échu","Remb. à venir")),"À vérifier")))` }, tdcV);
       r++;
     });
     const d1 = r - 1;
@@ -512,6 +539,8 @@
       ['Autres dettes (hors TVA)', `SUMIFS(${G},${C},"Dette")+SUMIFS(${G},${C},"~?")`],
       ['Autres remboursements (hors TVA)', `SUMIFS(${G},${C},"Remboursement")`],
     ];
+    if (rembEnProvision.length) totaux.push(['Remboursements TVA déjà sur le compte-provisions (comptés dans le disponible)',
+      `SUMIFS(${G},${C},"Remboursement TVA (en provision)")`]);
     const rTot = [];
     totaux.forEach(([lib, f], k) => {
       mset(F, r, 1, 6, lib, k ? st.hi : st.tot);
@@ -560,7 +589,8 @@
       [5, 6, 'REMBOURSEMENTS TVA À VENIR', dettesLues ? { f: `G${rTot[1]}` } : 'non lu'],
       [7, 8, 'POSITION NETTE', dispo != null && dettesLues ? { f: 'A10+E10-C10' } : 'non calculée'],
     ]);
-    mset(F, 11, 1, 8, 'Position nette = disponible + remboursements TVA à venir − dettes TVA à payer (positive : en faveur du client).', st.noteL);
+    mset(F, 11, 1, 8, 'Position nette = disponible + remboursements TVA à venir − dettes TVA à payer (positive : en faveur du client) ; ' +
+      'un remboursement déjà sur le compte-provisions n’est compté qu’une fois.', st.noteL);
     F.height(11, 14); F.height(12, 6);
     // Noms des montants clés, pour les reprendre ailleurs (fiche TVA, tableau de suivi…)
     wb.defineName('MW_CP_Consulte', F.name, JOUR).defineName('MW_CP_Disponible', F.name, `$G$${rDispo}`)
@@ -612,6 +642,7 @@
   const mt = n => (n == null ? '' : affiche(n).replace(' €', ''));
   const statutDe = d => {
     const t = triDate(d.echeance), sans = t === '99999999';
+    if (d.enProvision) return 'Déjà en provision';
     if (d.nature === 'dette') return sans ? 'Dette sans échéance' : t < aujourdhui ? 'Dette échue' : 'Dette à échoir';
     if (d.nature === 'remboursement') return sans ? 'Remb. sans date' : t < aujourdhui ? 'Remb. échu' : 'Remb. à venir';
     return 'À vérifier';
@@ -645,6 +676,8 @@
       plusAncienne ? kv('Plus ancienne échéance (dette TVA)', plusAncienne) : '',
       kv(`Remboursements TVA à venir ${n(rembAVenir)}${rembSansDate.length ? ` <span class="gris">dont ${rembSansDate.length} sans date</span>` : ''}`, affiche(sommeAVenir)),
       kv(`Remboursements TVA – échéance passée ${n(rembPasses)}<br><span class="gris">à rapprocher de la banque</span>`, affiche(somme(rembPasses))),
+      rembEnProvision.length ? kv(`Remboursements TVA déjà sur le compte-provisions ${n(rembEnProvision)}<br><span class="gris">compris dans le disponible</span>`,
+        affiche(somme(rembEnProvision))) : '',
       autresDettes.length ? kv(`Autres dettes, hors TVA ${n(autresDettes)}`, affiche(somme(autresDettes))) : '',
       autresRemb.length ? kv(`Autres remboursements, hors TVA ${n(autresRemb)}`, affiche(somme(autresRemb))) : '',
     ].join('')) + kv('Paiements en attente', nbAttente == null ? 'non lus' : nbAttente ? String(nbAttente) : 'aucun') +
@@ -652,7 +685,7 @@
     // 3. Dettes et remboursements
     const lignesDettes = dettes.map(d => {
       const st = statutDe(d);
-      return `<tr><td class="nw">${esc(d.reference)}</td><td>${esc(d.type)}</td><td class="nw">${esc(NATURE[d.nature] + (d.tva ? ' TVA' : ''))}</td>` +
+      return `<tr><td class="nw">${esc(d.reference)}</td><td>${esc(d.type)}</td><td class="nw">${esc(NATURE[d.nature] + (d.tva ? ' TVA' : '') + (d.enProvision ? ' (en provision)' : ''))}</td>` +
         `<td class="nw">${esc(d.echeance)}</td><td class="r">${mt(d.initial)}</td><td class="r">${mt(d.solde)}</td><td class="r">${mt(d.reste)}</td>` +
         `<td class="c nw ${classeStatut(st)}">${esc(st)}</td></tr>`;
     }).join('') || ligneVide(8, dettesLues ? (infoDettes || 'Aucune dette ni aucun remboursement.') : 'Tableau non lu (voir les points d’attention).');
@@ -726,7 +759,7 @@
 <div class="regle">Extraction MyMinfin (Mes paiements) du ${esc(etabli)}${majSPF ? ' · données SPF à jour au ' + esc(majSPF) : ''} · lecture seule</div>
 <div class="etat ${etat[0]}">${esc(etat[1])}</div>
 <div class="kpis">${kpi('DISPONIBLE · COMPTE-PROVISIONS', dispo != null ? affiche(dispo) : 'non lu')}${kpi('DETTES TVA À PAYER', dettesLues ? affiche(totalTVA) : 'non lu', dettesLues && totalTVA > 0.005 ? 'ko' : '')}${kpi('REMBOURSEMENTS TVA À VENIR', dettesLues ? affiche(sommeAVenir) : 'non lu')}${kpi('POSITION NETTE', position != null ? affiche(position) : 'non calculée', position == null ? '' : position < -0.005 ? 'ko' : 'ok')}</div>
-<p class="note">Position nette = disponible + remboursements TVA à venir − dettes TVA à payer (positive : en faveur du client).</p>
+<p class="note">Position nette = disponible + remboursements TVA à venir − dettes TVA à payer (positive : en faveur du client) ; un remboursement déjà sur le compte-provisions n’est compté qu’une fois.</p>
 <div class="deux"><div>${h2('Compte-provisions TVA')}
 <table class="t"><thead><tr><th>Type</th><th>Référence</th><th>Date valeur</th><th class="r">Disponible</th></tr></thead><tbody>${prov}
 <tr class="tot"><td colspan="3">Total des provisions</td><td class="r">${mt(totalProv)}</td></tr>
@@ -822,6 +855,7 @@ ${avert.length ? h2('Points d’attention') + '<ul class="alertes">' + avert.map
     if (plusAncienne) kv('Plus ancienne échéance (dette TVA)', plusAncienne);
     if (rembAVenir.length) kv(`Remboursements TVA à venir (${rembAVenir.length}${rembSansDate.length ? `, dont ${rembSansDate.length} sans date` : ''})`, affiche(somme(rembAVenir)));
     if (rembPasses.length) kv(`Remboursements TVA – échéance passée (${rembPasses.length})`, affiche(somme(rembPasses)));
+    if (rembEnProvision.length) kv(`Remboursements TVA déjà sur le compte-provisions (${rembEnProvision.length})`, affiche(somme(rembEnProvision)));
     if (autresDettes.length) kv(`Autres dettes, hors TVA (${autresDettes.length})`, affiche(somme(autresDettes)));
     if (autresRemb.length) kv(`Autres remboursements, hors TVA (${autresRemb.length})`, affiche(somme(autresRemb)));
     if (nbAttente != null) kv('Paiements en attente', nbAttente ? String(nbAttente) : 'aucun');
@@ -830,8 +864,8 @@ ${avert.length ? h2('Points d’attention') + '<ul class="alertes">' + avert.map
   if (avert.length || !reconnu || rienLu) {
     const w = h('div', reconnu && !rienLu ? 'warn' : 'warn err');
     (!reconnu ? ['Page non reconnue : ouvre MyMinfin > Mes paiements pour le client, puis relance le script.',
-                 'Si le problème persiste, clique « Copier le diagnostic » et envoie-le à Claude (aucun montant dedans).']
-      : rienLu ? avert.concat('Rien n’a pu être lu. Si le problème persiste, clique « Copier le diagnostic » et envoie-le à Claude (aucun montant dedans).')
+                 'Si le problème persiste, clique « Copier le diagnostic » et envoie-le à Queenie (aucun montant dedans).']
+      : rienLu ? avert.concat('Rien n’a pu être lu. Si le problème persiste, clique « Copier le diagnostic » et envoie-le à Queenie (aucun montant dedans).')
       : avert).forEach(a => w.append(h('div', null, '• ' + a)));
     body.append(w);
   }
