@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installer le favori « Devoldère → Odoo »</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F4F6F9; color: #1D1E1C; font: 17px/1.55 Arial, sans-serif; }
+  header { background: #fff; border-bottom: 4px solid #1C9CD9; padding: 18px 16px; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  header img { height: 46px; display: block; margin-bottom: 10px; }
+  header h1 { margin: 0; font-size: 26px; color: #1C9CD9; }
+  header p { margin: 4px 0 0; color: #555; }
+  main { padding: 24px 16px 40px; }
+  .card { background: #fff; border: 1px solid #D9DEE7; border-radius: 10px; padding: 20px 24px; margin-bottom: 18px; }
+  .card h2 { margin: 0 0 10px; font-size: 20px; color: #1C9CD9; }
+  li { margin-bottom: 10px; }
+  kbd { display: inline-block; padding: 1px 8px; border: 1px solid #ccc; border-bottom-width: 3px; border-radius: 5px; background: #FAFBFC; font: bold 15px Arial; }
+  a.favori { display: inline-block; margin: 10px 0; padding: 14px 26px; border-radius: 10px; background: #1C9CD9; color: #fff; font-weight: bold; font-size: 19px; text-decoration: none; cursor: grab; box-shadow: 0 3px 8px rgba(0,0,0,.2); }
+  a.favori[aria-disabled] { background: #9DB6C4; cursor: not-allowed; box-shadow: none; }
+  .attention { background: #FDF1E6; border-left: 5px solid #C55A11; padding: 10px 14px; border-radius: 6px; }
+  .etat { padding: 10px 14px; border-radius: 6px; font-size: 15px; }
+  .etat.ok { background: #E8F5EA; border-left: 5px solid #2E8B3D; }
+  .etat.ko { background: #FDECEC; border-left: 5px solid #C62828; }
+  .etat.en { background: #EAF6FC; border-left: 5px solid #1C9CD9; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #E3E7EE; vertical-align: top; }
+  th { font-size: 13px; text-transform: uppercase; color: #555; border-bottom: 2px solid #1C9CD9; }
+  .petit { color: #666; font-size: 14px; }
+  button { font: inherit; font-size: 15px; padding: 6px 12px; border: 1px solid #1C9CD9; border-radius: 6px; background: #fff; color: #1C9CD9; cursor: pointer; }
+  #copie { color: #2E8B3D; margin-left: 8px; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <img src="data:image/png;base64,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" alt="Moore Auren">
+  <h1>Installer le favori « Devoldère → Odoo »</h1>
+  <p>Pneus Devoldère — envoyer les ventes et la caisse de TyreStream dans Odoo</p>
+</div></header>
+<main class="wrap">
+  <div class="card">
+    <h2>À faire une seule fois</h2>
+    <ol>
+      <li>Ouvre cette page dans <b>Google Chrome</b>, <b>Microsoft Edge</b> ou <b>Firefox</b>.</li>
+      <li>Fais apparaître la barre des favoris : appuie en même temps sur <kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>B</kbd>.<br>
+        <span class="petit">Une barre apparaît sous l'adresse du site (dans Firefox, elle s'appelle « barre personnelle »). Si elle était déjà là, elle disparaît : appuie encore une fois.</span></li>
+      <li>Avec la souris, <b>attrape le bouton bleu ci-dessous et lâche-le dans la barre des favoris</b> :<br>
+        <a class="favori" id="bm" href="#" aria-disabled="true">Devoldère → Odoo</a></li>
+      <li>C'est fini : le bouton « Devoldère → Odoo » est maintenant dans ta barre des favoris.</li>
+    </ol>
+    <p class="etat en" id="etat">Préparation du favori…</p>
+    <p class="attention">Ne clique pas sur le bouton bleu de cette page : il faut le <b>glisser</b>. Il ne fonctionne que dans l'Odoo de Pneus Devoldère.</p>
+    <p class="petit">Si le glisser ne marche pas : <button id="copier">Copier le favori</button><span id="copie"></span><br>
+      puis clic droit dans la barre des favoris › « Ajouter une page… » (Chrome), « Ajouter cette page aux favoris » (Edge) ou « Ajouter un marque-page… » (Firefox), nom « Devoldère → Odoo », et colle dans la case de l'adresse (URL).</p>
+  </div>
+  <div class="card">
+    <h2>Mises à jour</h2>
+    <p>Rien à faire : à chaque clic, le favori charge la dernière version de l'outil publiée sur cette page. Le favori déjà installé reste valable.</p>
+    <table>
+      <tr><th>Navigateur</th><th>Barre des favoris</th><th>Ajouter à la main</th></tr>
+      <tr><td>Google Chrome</td><td><kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>B</kbd></td><td>clic droit dans la barre › Ajouter une page…</td></tr>
+      <tr><td>Microsoft Edge</td><td><kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>B</kbd></td><td>clic droit dans la barre › Ajouter cette page aux favoris</td></tr>
+      <tr><td>Firefox</td><td><kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>B</kbd></td><td>clic droit dans la barre › Ajouter un marque-page…</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>Ensuite, chaque semaine</h2>
+    <p>Suis la procédure « Pneus Devoldère — TyreStream vers Odoo » : 3 exports dans TyreStream, puis un clic sur ce favori dans Odoo.</p>
+    <p class="petit" id="pied">Outil Moore Walcourt. Le favori charge l'outil depuis cette page et ne marche que dans l'Odoo de Pneus Devoldère.</p>
+  </div>
+</main>
+<script>
+(function () {
+  var lien = document.getElementById('bm'), etat = document.getElementById('etat');
+  var FICHIER = 'devoldere-odoo.js';
+  var BASE = new URL('.', location.href).href.split('#')[0].split('?')[0];
+  var publiee = location.protocol === 'https:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var sure = /^https?:\/\/[^'"\\%\s<>`]+\/$/.test(BASE);
+  var favori = null;
+  function chargeur(b) {
+    return "javascript:(async()=>{try{const b='" + b + "';" +
+      "const r=await fetch(b+'" + FICHIER + "?v='+Date.now(),{cache:'no-store',referrerPolicy:'no-referrer'})" +
+      ".catch(e=>{throw new Error('code en ligne inaccessible ('+e.message+')')});" +
+      "if(!r.ok)throw new Error('code en ligne introuvable (HTTP '+r.status+', " + FICHIER + ")');" +
+      "const t=await r.text();" +
+      "try{(0,eval)(t)}catch(e){if(!(e instanceof EvalError))throw e;const s=document.createElement('script');s.textContent=t;document.head.append(s);s.remove()}" +
+      "}catch(e){alert('Devoldere - Odoo : '+((e&&e.message)||e))}})()";
+  }
+  function message(cls, txt) { etat.className = 'etat ' + cls; etat.textContent = txt; }
+  lien.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (!favori) return;
+    lien.textContent = 'Glisse-moi dans la barre des favoris';
+    setTimeout(function () { lien.textContent = 'Devoldère → Odoo'; }, 2500);
+  });
+  document.getElementById('copier').onclick = function () {
+    var c = document.getElementById('copie');
+    if (!favori) { c.textContent = 'Favori pas encore prêt.'; return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(favori).then(function () { c.textContent = 'Copié.'; }, function () { c.textContent = 'Copie refusée : utilise le glisser.'; });
+    else c.textContent = 'Copie impossible ici : utilise le glisser.';
+  };
+  if (!publiee || !sure) {
+    message('ko', 'Cette page doit être ouverte depuis son adresse en ligne (https://…github.io/…). Ouverte depuis un fichier, elle ne peut pas préparer le favori.');
+    return;
+  }
+  favori = chargeur(BASE);
+  lien.setAttribute('href', favori);
+  lien.removeAttribute('aria-disabled');
+  message('en', 'Favori prêt. Contrôle de l\'outil en ligne…');
+  fetch(BASE + FICHIER + '?v=' + Date.now(), { cache: 'no-store' }).then(function (r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.text();
+  }).then(function (t) {
+    var v = /Devold[eè]re → Odoo v(\d+\.\d+(?:\.\d+)?)/.exec(t.slice(0, 300));
+    if (!v) throw new Error('fichier non reconnu');
+    message('ok', 'Favori prêt. Outil en ligne : version ' + v[1] + '.');
+    document.getElementById('pied').textContent = 'Outil Moore Walcourt, version ' + v[1] + ' en ligne. Le favori charge l\'outil depuis cette page (' + BASE + ') et ne marche que dans l\'Odoo de Pneus Devoldère.';
+  }, function (e) {
+    message('ko', 'Favori prêt, mais l\'outil en ligne est introuvable (' + FICHIER + ' : ' + e.message + '). Préviens Queenie.');
+  });
+})();
+</script>
+</body>
+</html>
